@@ -1,3 +1,7 @@
 package infrastructure
 
-func openDB() {}
+import "database/sql"
+
+type Database interface {
+	GetDB() *sql.DB
+}

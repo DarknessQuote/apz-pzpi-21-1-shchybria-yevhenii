@@ -2,23 +2,26 @@ package chiServer
 
 import (
 	"devquest-server/config"
+	"devquest-server/devquest/infrastructure"
 	"fmt"
 	"log"
 	"net/http"
 )
 
 type chiServer struct {
-	conf *config.Config
+	config *config.Config
+	database *infrastructure.Database
 }
 
-func NewChiServer(config *config.Config) *chiServer {
+func NewChiServer(conf *config.Config, db *infrastructure.Database) *chiServer {
 	return &chiServer {
-		conf: config,
+		config: conf,
+		database: db,
 	}
 }
 
 func (s *chiServer) Start() {
-	port := s.conf.Server.Port
+	port := s.config.Server.Port
 	serverUrl := fmt.Sprintf(":%d", port)
 	router := getRoutes()
 	
