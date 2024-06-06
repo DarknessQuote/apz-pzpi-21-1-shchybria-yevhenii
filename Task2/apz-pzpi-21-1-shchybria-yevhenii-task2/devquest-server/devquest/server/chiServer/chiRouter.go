@@ -1,4 +1,4 @@
-package server
+package chiServer
 
 import (
 	"net/http"
