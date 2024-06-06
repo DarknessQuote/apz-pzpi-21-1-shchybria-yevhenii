@@ -4,8 +4,8 @@ import (
 	"devquest-server/config"
 	"devquest-server/devquest/infrastructure"
 	"devquest-server/devquest/infrastructure/postgres"
-	"devquest-server/devquest/server"
-	"devquest-server/devquest/server/chiServer"
+	"devquest-server/server"
+	"devquest-server/server/chiServer"
 	"log"
 )
 
@@ -25,6 +25,7 @@ func main() {
 	log.Println("Connected to Postgres")
 	defer db.GetDB().Close()
 
-	server = chiServer.NewChiServer(conf, &db)
+	authSettings := infrastructure.InitAuthSettings(conf)
+	server = chiServer.NewChiServer(conf, &db, *&authSettings)
 	server.Start()
 }

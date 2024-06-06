@@ -10,3 +10,13 @@ database:
     sslmode: disable
     timezone: Europe/Kiev
     connect_timeout: 5
+
+auth:
+    issuer: devquest
+    secret: devquestsecretkey
+    audience: devquest
+    tokenexpiry: 15
+    refreshexpiry: 24
+    cookiedomain: localhost
+    cookiepath: /
+    cookiename: __Host-refresh_token

@@ -22,9 +22,21 @@ type (
 		ConnectTimeout int
 	}
 
+	Auth struct {
+		Issuer string
+		Secret string
+		Audience string
+		TokenExpiry int
+		RefreshExpiry int
+		CookieDomain string
+		CookiePath string
+		CookieName string
+	}
+
 	Config struct {
 		Server *Server
 		Database *Database
+		Auth *Auth
 	}
 )
 
