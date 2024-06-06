@@ -9,4 +9,5 @@ type User struct {
 	Username string `json:"username"`
 	PasswordHash string `json:"password_hash"`
 	Role Role `json:"role"`
+	Company Company `json:"company"`
 }
