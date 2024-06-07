@@ -1,14 +1,14 @@
 package repositories
 
 import (
-	"devquest-server/devquest/domain/models"
+	"devquest-server/devquest/domain/entities"
 
 	"github.com/google/uuid"
 )
 
 type TaskRepo interface {
-	GetTasksForProject(uuid.UUID) (*[]models.Task, error)
-	AddTask(models.Task) (*models.Task, error)
+	GetTasksForProject(uuid.UUID) (*[]entities.Task, error)
+	AddTask(entities.Task) (*entities.Task, error)
 	UpdateTask(uuid.UUID) error
 	DeleteTask(uuid.UUID) error
 

@@ -1,4 +1,4 @@
-package models
+package entities
 
 import (
 	"time"
@@ -13,4 +13,9 @@ type Task struct {
 	Project Project `json:"project"`
 	Category TaskCategory `json:"category"`
 	ExpectedTime time.Time `json:"expected_time"`
+}
+
+type TaskCategory struct {
+	ID uuid.UUID `json:"id"`
+	Name string `json:"name"`
 }

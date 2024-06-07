@@ -1,20 +1,20 @@
 package repositories
 
 import (
-	"devquest-server/devquest/domain/models"
+	"devquest-server/devquest/domain/entities"
 
 	"github.com/google/uuid"
 )
 
 type ProjectRepo interface {
-	GetProjectsOfManager(uuid.UUID) ([]*models.Project, error)
-	GetProjectsOfDeveloper(uuid.UUID) ([]*models.Project, error)
-	AddProject(models.Project) (*models.Project, error)
+	GetProjectsOfManager(uuid.UUID) ([]*entities.Project, error)
+	GetProjectsOfDeveloper(uuid.UUID) ([]*entities.Project, error)
+	AddProject(entities.Project) (*entities.Project, error)
 	UpdateProject(uuid.UUID) error
 	DeleteProject(uuid.UUID) error
 
-	AddUserToProject(models.Project, models.User) error
-	RemoveUserFromProject(models.Project, models.User) error
-	AddAchievementToProject(models.Project, models.Achievement) error
-	GiveAchievementToUser(models.Achievement, models.User) error	
+	AddUserToProject(entities.Project, entities.User) error
+	RemoveUserFromProject(entities.Project, entities.User) error
+	AddAchievementToProject(entities.Project, entities.Achievement) error
+	GiveAchievementToUser(entities.Achievement, entities.User) error	
 }

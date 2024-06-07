@@ -1,15 +1,15 @@
 package repositories
 
 import (
-	"devquest-server/devquest/domain/models"
+	"devquest-server/devquest/domain/entities"
 
 	"github.com/google/uuid"
 )
 
 type CompanyRepo interface {
-	GetAllCompanies() ([]*models.Company, error)
-	GetCompanyByID(uuid.UUID) (*models.Company, error)
-	AddCompany(models.Company) (*models.Company, error)
-	UpdateCompany(uuid.UUID) error
-	DeleteCompany(uuid.UUID) error
+	GetAllCompanies() ([]*entities.Company, error)
+	GetCompanyByID(companyID uuid.UUID) (*entities.Company, error)
+	AddCompany(entities.Company) (*entities.Company, error)
+	UpdateCompany(companyID uuid.UUID) error
+	DeleteCompany(companyID uuid.UUID) error
 }
