@@ -22,6 +22,7 @@ func (c *CompanyHttpHandler) GetAllCompanies(w http.ResponseWriter, r *http.Requ
 	companies, err := c.companyUsecase.FindAllCompanies()
 	if err != nil {
 		utils.ErrorJSON(w, err)
+		return
 	}
 
 	_ = utils.WriteJSON(w, http.StatusAccepted, companies)
@@ -31,11 +32,13 @@ func (c *CompanyHttpHandler) GetCompanyByID(w http.ResponseWriter, r *http.Reque
 	companyID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		utils.ErrorJSON(w, err)
+		return
 	}
 
 	company, err := c.companyUsecase.FindCompanyByID(companyID)
 	if err != nil {
 		utils.ErrorJSON(w, err)
+		return
 	}
 
 	_ = utils.WriteJSON(w, http.StatusAccepted, company)
@@ -47,11 +50,13 @@ func (c *CompanyHttpHandler) AddCompany (w http.ResponseWriter, r *http.Request)
 	err := utils.ReadJSON(w, r, &insertCompanyDTO)
 	if err != nil {
 		utils.ErrorJSON(w, err)
+		return
 	}
 
 	newCompany, err := c.companyUsecase.CreateNewCompany(&insertCompanyDTO)
 	if err != nil {
 		utils.ErrorJSON(w, err)
+		return
 	}
 
 	_ = utils.WriteJSON(w, http.StatusAccepted, newCompany)
@@ -61,11 +66,20 @@ func (c *CompanyHttpHandler) UpdateCompany (w http.ResponseWriter, r *http.Reque
 	companyID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		utils.ErrorJSON(w, err)
+		return
 	}
 
-	err = c.companyUsecase.UpdateCompany(companyID)
+	var payload models.UpdateCompanyDTO
+	err = utils.ReadJSON(w, r, &payload)
 	if err != nil {
 		utils.ErrorJSON(w, err)
+		return
+	}
+
+	err = c.companyUsecase.UpdateCompany(companyID, payload)
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
 	}
 
 	res := utils.JSONResponse{
@@ -80,11 +94,13 @@ func (c *CompanyHttpHandler) DeleteCompany (w http.ResponseWriter, r *http.Reque
 	companyID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		utils.ErrorJSON(w, err)
+		return
 	}
 
 	err = c.companyUsecase.DeleteCompany(companyID)
 	if err != nil {
 		utils.ErrorJSON(w, err)
+		return
 	}
 
 	res := utils.JSONResponse{

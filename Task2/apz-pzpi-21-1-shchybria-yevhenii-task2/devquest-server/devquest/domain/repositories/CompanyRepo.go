@@ -10,6 +10,6 @@ type CompanyRepo interface {
 	GetAllCompanies() ([]*entities.Company, error)
 	GetCompanyByID(companyID uuid.UUID) (*entities.Company, error)
 	AddCompany(entities.Company) (*entities.Company, error)
-	UpdateCompany(companyID uuid.UUID) error
+	UpdateCompany(*entities.Company) error
 	DeleteCompany(companyID uuid.UUID) error
 }

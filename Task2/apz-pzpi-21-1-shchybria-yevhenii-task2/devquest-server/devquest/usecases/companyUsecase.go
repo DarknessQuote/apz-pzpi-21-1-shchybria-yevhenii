@@ -4,6 +4,7 @@ import (
 	"devquest-server/devquest/domain/entities"
 	"devquest-server/devquest/domain/models"
 	"devquest-server/devquest/domain/repositories"
+	"errors"
 
 	"github.com/google/uuid"
 )
@@ -50,8 +51,20 @@ func (c *CompanyUsecase) CreateNewCompany(companyForInsert *models.InsertCompany
 	return company, nil
 }
 
-func (c *CompanyUsecase) UpdateCompany(companyID uuid.UUID) error {
-	err := c.companyRepo.UpdateCompany(companyID)
+func (c *CompanyUsecase) UpdateCompany(companyID uuid.UUID, updatedCompany models.UpdateCompanyDTO) error {
+	companyToUpdate, err := c.companyRepo.GetCompanyByID(companyID)
+	if err != nil {
+		return err
+	}
+	if companyToUpdate == nil {
+		return errors.New("company does not exist")
+	}
+
+	companyToUpdate.Name = updatedCompany.Name
+	companyToUpdate.Owner = updatedCompany.Owner
+	companyToUpdate.Email = updatedCompany.Email
+
+	err = c.companyRepo.UpdateCompany(companyToUpdate)
 	return err
 }
 

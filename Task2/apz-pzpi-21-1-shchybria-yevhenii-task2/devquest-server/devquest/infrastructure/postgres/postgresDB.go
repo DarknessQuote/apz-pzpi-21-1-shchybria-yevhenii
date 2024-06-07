@@ -5,23 +5,24 @@ import (
 	"devquest-server/config"
 	"fmt"
 	"sync"
+	"time"
 
 	_ "github.com/jackc/pgconn"
 	_ "github.com/jackc/pgx/v5"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
-type PostgresRepo struct {
+type PostgresDB struct {
 	Db *sql.DB
 }
 
 var (
 	once       sync.Once
-	dbInstance *PostgresRepo
+	dbInstance *PostgresDB
 	dbError    error
 )
 
-func NewPostgresDB(conf *config.Config) (*PostgresRepo, error) {
+func NewPostgresDB(conf *config.Config) (*PostgresDB, error) {
 	once.Do(func() {
 		dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s timezone=%s connect_timeout=%d",
 			conf.Database.Host,
@@ -45,12 +46,16 @@ func NewPostgresDB(conf *config.Config) (*PostgresRepo, error) {
 			return
 		}
 
-		dbInstance = &PostgresRepo{Db: db}
+		dbInstance = &PostgresDB{Db: db}
 	})
 
 	return dbInstance, dbError
 }
 
-func (p *PostgresRepo) GetDB() *sql.DB {
+func (p *PostgresDB) GetDB() *sql.DB {
 	return p.Db
+}
+
+func (p *PostgresDB) GetDBTimeout() time.Duration {
+	return time.Second * 3
 }

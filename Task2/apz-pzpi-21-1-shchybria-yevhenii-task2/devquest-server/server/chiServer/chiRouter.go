@@ -2,7 +2,7 @@ package chiServer
 
 import (
 	"devquest-server/devquest/handlers"
-	"devquest-server/devquest/infrastructure/test"
+	"devquest-server/devquest/infrastructure/postgres"
 	"devquest-server/devquest/usecases"
 	"net/http"
 
@@ -29,7 +29,7 @@ func getRoutes() http.Handler {
 }
 
 func (m *chiMux) InitializeCompanyHttpHandler() {
-	companyRepository := test.NewCompanyTestRepo()
+	companyRepository := postgres.NewCompanyPostgresRepo(*serverInstance.Database)
 	companyUsecase := usecases.NewCompanyUsecase(companyRepository)
 	companyHandler := handlers.NewCompanyHttpHandler(*companyUsecase)
 
