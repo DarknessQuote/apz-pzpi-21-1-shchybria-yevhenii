@@ -9,8 +9,9 @@ type (
 		LastName string `json:"last_name"`
 		Username string `json:"username"`
 		PasswordHash string `json:"password_hash"`
-		Role Role `json:"role"`
-		Company Company `json:"company"`
+		RoleID uuid.UUID `json:"role_id"`
+		CompanyID uuid.UUID `json:"company_id"`
+		Points int `json:"points"`
 	}
 
   Role struct {

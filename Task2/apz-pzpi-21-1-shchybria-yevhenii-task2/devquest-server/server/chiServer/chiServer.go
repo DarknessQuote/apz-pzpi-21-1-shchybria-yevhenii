@@ -2,7 +2,10 @@ package chiServer
 
 import (
 	"devquest-server/config"
+	"devquest-server/devquest/handlers"
 	"devquest-server/devquest/infrastructure"
+	"devquest-server/devquest/infrastructure/postgres"
+	"devquest-server/devquest/usecases"
 	"fmt"
 	"log"
 	"net/http"
@@ -18,6 +21,8 @@ type chiServer struct {
 var (
 	once sync.Once;
 	serverInstance *chiServer
+	authHttpHandler *handlers.AuthHttpHandler
+	companyHttpHandler *handlers.CompanyHttpHandler
 )
 
 func NewChiServer(conf *config.Config, db *infrastructure.Database, auth *infrastructure.Auth) *chiServer {
@@ -36,12 +41,25 @@ func GetChiServer() *chiServer {
 }
 
 func (s *chiServer) Start() {
+	initializeHttpHandlers()
+
 	port := s.Config.Server.Port
-	serverUrl := fmt.Sprintf(":%d", port)
+	serverUrl := fmt.Sprintf(":%d", port)	
 	router := getRoutes()
 	
 	log.Printf("Starting application on port %d", port)
 	if err := http.ListenAndServe(serverUrl, router); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func initializeHttpHandlers() {
+	userRepository := postgres.NewUserPostgresRepo(*serverInstance.Database)
+	companyRepository := postgres.NewCompanyPostgresRepo(*serverInstance.Database)
+
+	userUsecase := usecases.NewUserUsecase(userRepository, companyRepository)
+	companyUsecase := usecases.NewCompanyUsecase(companyRepository)
+
+	authHttpHandler = handlers.NewAuthHttpHandler(*userUsecase)
+	companyHttpHandler = handlers.NewCompanyHttpHandler(*companyUsecase)
 }

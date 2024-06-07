@@ -1,43 +1,35 @@
 package chiServer
 
 import (
-	"devquest-server/devquest/handlers"
-	"devquest-server/devquest/infrastructure/postgres"
-	"devquest-server/devquest/usecases"
+	"devquest-server/server/middleware"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 )
-
-type chiMux struct {
-	*chi.Mux
-}
-
 func getRoutes() http.Handler {
-	mux := &chiMux{chi.NewMux()}
+	mux := chi.NewMux()
 
+	mux.Use(middleware.EnableCORS)
+	
 	mux.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello World"))
 	})
-	mux.Post("/login", func(w http.ResponseWriter, r *http.Request) {
-		authSettings := &handlers.Auth{Auth: GetChiServer().AuthSettings}
-		authSettings.Login(w, r)
+
+	mux.Route("/auth", func(r chi.Router) {
+		authSettings := GetChiServer().AuthSettings
+
+		r.Post("/login", authHttpHandler.Login(authSettings))
+		r.Post("/register", authHttpHandler.Register(authSettings))
+		r.Delete("/logout", authHttpHandler.Logout(authSettings))
 	})
-	mux.InitializeCompanyHttpHandler()
+	
+	mux.Route("/companies", func(r chi.Router) {
+		r.Get("/", companyHttpHandler.GetAllCompanies)
+		r.Get("/{id}", companyHttpHandler.GetCompanyByID)
+		r.Post("/", companyHttpHandler.AddCompany)
+		r.Put("/{id}", companyHttpHandler.UpdateCompany)
+		r.Delete("/{id}", companyHttpHandler.DeleteCompany)
+	})
 
 	return mux
-}
-
-func (m *chiMux) InitializeCompanyHttpHandler() {
-	companyRepository := postgres.NewCompanyPostgresRepo(*serverInstance.Database)
-	companyUsecase := usecases.NewCompanyUsecase(companyRepository)
-	companyHandler := handlers.NewCompanyHttpHandler(*companyUsecase)
-
-	m.Route("/companies", func(r chi.Router) {
-		r.Get("/", companyHandler.GetAllCompanies)
-		r.Get("/{id}", companyHandler.GetCompanyByID)
-		r.Post("/", companyHandler.AddCompany)
-		r.Put("/{id}", companyHandler.UpdateCompany)
-		r.Delete("/{id}", companyHandler.DeleteCompany)
-	})
 }

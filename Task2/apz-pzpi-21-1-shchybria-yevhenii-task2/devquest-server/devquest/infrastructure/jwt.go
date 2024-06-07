@@ -27,7 +27,7 @@ type (
 	JWTUser struct {
 		ID       uuid.UUID `json:"id"`
 		Username string    `json:"username"`
-		RoleName string    `json:"role"`
+		RoleTitle string    `json:"role"`
 	}
 
 	TokenPairs struct {
