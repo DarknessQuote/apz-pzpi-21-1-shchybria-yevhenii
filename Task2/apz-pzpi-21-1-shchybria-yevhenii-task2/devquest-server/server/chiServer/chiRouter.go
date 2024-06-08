@@ -34,12 +34,23 @@ func getRoutes() http.Handler {
 	mux.Route("/projects", func(r chi.Router) {
 		r.Get("/manager/{manager_id}", projectHttpHandler.GetProjectsOfManager)
 		r.Get("/developer/{developer_id}", projectHttpHandler.GetProjectsOfDeveloper)
-		r.Post("/", projectHttpHandler.AddProject)
+		
 		r.Put("/{id}", projectHttpHandler.UpdateProject)
+		r.Post("/", projectHttpHandler.AddProject)
 		r.Delete("/{id}", projectHttpHandler.DeleteProject)
+
 		r.Get("/developers/{project_id}", projectHttpHandler.GetProjectDevelopers)
-		r.Post("/developers/{project_id}&{developer_id}", projectHttpHandler.AddDeveloperToProject)
-		r.Delete("/developers/{project_id}&{developer_id}", projectHttpHandler.RemoveDeveloperFromProject)
+		r.Post("/developers", projectHttpHandler.AddDeveloperToProject)
+		r.Delete("/developers", projectHttpHandler.RemoveDeveloperFromProject)
+	})
+
+	mux.Route("/achievements", func(r chi.Router) {
+		r.Get("/project/{project_id}", achievementHttpHandler.GetProjectAchievements)
+		r.Get("/developer/{developer_id}", achievementHttpHandler.GetDeveloperAchievements)
+		r.Post("/{project_id}", achievementHttpHandler.AddAchievementToProject)
+		r.Put("/{id}", achievementHttpHandler.UpdateAchievement)
+		r.Delete("/{id}", achievementHttpHandler.DeleteAchievement)
+		r.Post("/give", achievementHttpHandler.GiveAchievementToDeveloper)
 	})
 
 	return mux

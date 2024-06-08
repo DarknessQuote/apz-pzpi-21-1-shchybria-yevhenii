@@ -9,7 +9,7 @@ import (
 
 type ProjectRepo interface {
 	GetProjectByID(projectID uuid.UUID) (*entities.Project, error)
-	AddProject(addProject entities.Project) error
+	AddProject(newProject entities.Project) error
 	UpdateProject(projectID uuid.UUID, updatedProject models.UpdateProjectDTO) error
 	DeleteProject(projectID uuid.UUID) error
 	
@@ -19,4 +19,5 @@ type ProjectRepo interface {
 	CheckDeveloperOnProject(projectID uuid.UUID, developerID uuid.UUID) (bool, error)
 	AddDeveloperToProject(projectID uuid.UUID, developerID uuid.UUID) error
 	RemoveDeveloperFromProject(projectID uuid.UUID, developerID uuid.UUID) error
+	UpdateDeveloperProjectPoints(projectID uuid.UUID, developerID uuid.UUID, points int) error
 }

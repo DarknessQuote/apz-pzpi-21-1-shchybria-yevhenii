@@ -251,3 +251,21 @@ func (p *ProjectPostgresRepo) RemoveDeveloperFromProject(projectID uuid.UUID, de
 
 	return nil
 }
+
+func (p *ProjectPostgresRepo) UpdateDeveloperProjectPoints(projectID uuid.UUID, developerID uuid.UUID, points int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), p.db.GetDBTimeout())
+	defer cancel()
+
+	execute := `
+		UPDATE projects_users
+		SET points = points + $1
+		WHERE project_id = $2 AND developer_id = $3
+	`
+
+	_, err := p.db.GetDB().ExecContext(ctx, execute, points, projectID, developerID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -5,6 +5,7 @@ import "github.com/google/uuid"
 type Achievement struct {
 	ID uuid.UUID `json:"id"`
 	Name string `json:"name"`
+	Description string `json:"description"`
 	Points int `json:"points"`
-	Project Project `json:"project"`
+	ProjectID uuid.UUID `json:"project_id"`
 }

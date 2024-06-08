@@ -138,13 +138,13 @@ func (p *ProjectHttpHandler) DeleteProject(w http.ResponseWriter, r *http.Reques
 }
 
 func (p *ProjectHttpHandler) AddDeveloperToProject(w http.ResponseWriter, r *http.Request) {
-	projectID, err := uuid.Parse(chi.URLParam(r, "project_id"))
+	projectID, err := uuid.Parse(r.URL.Query().Get("projectID"))
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
 	}
 
-	developerID, err := uuid.Parse(chi.URLParam(r, "developer_id"))
+	developerID, err := uuid.Parse(r.URL.Query().Get("developerID"))
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
@@ -165,13 +165,13 @@ func (p *ProjectHttpHandler) AddDeveloperToProject(w http.ResponseWriter, r *htt
 }
 
 func (p *ProjectHttpHandler) RemoveDeveloperFromProject(w http.ResponseWriter, r *http.Request) {
-	projectID, err := uuid.Parse(chi.URLParam(r, "project_id"))
+	projectID, err := uuid.Parse(r.URL.Query().Get("projectID"))
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
 	}
 
-	developerID, err := uuid.Parse(chi.URLParam(r, "developer_id"))
+	developerID, err := uuid.Parse(r.URL.Query().Get("developerID"))
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
