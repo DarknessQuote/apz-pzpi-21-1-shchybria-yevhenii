@@ -31,5 +31,16 @@ func getRoutes() http.Handler {
 		r.Delete("/{id}", companyHttpHandler.DeleteCompany)
 	})
 
+	mux.Route("/projects", func(r chi.Router) {
+		r.Get("/manager/{manager_id}", projectHttpHandler.GetProjectsOfManager)
+		r.Get("/developer/{developer_id}", projectHttpHandler.GetProjectsOfDeveloper)
+		r.Post("/", projectHttpHandler.AddProject)
+		r.Put("/{id}", projectHttpHandler.UpdateProject)
+		r.Delete("/{id}", projectHttpHandler.DeleteProject)
+		r.Get("/developers/{project_id}", projectHttpHandler.GetProjectDevelopers)
+		r.Post("/developers/{project_id}&{developer_id}", projectHttpHandler.AddDeveloperToProject)
+		r.Delete("/developers/{project_id}&{developer_id}", projectHttpHandler.RemoveDeveloperFromProject)
+	})
+
 	return mux
 }

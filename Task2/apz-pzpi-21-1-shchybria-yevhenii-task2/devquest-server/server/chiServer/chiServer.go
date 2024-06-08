@@ -23,6 +23,7 @@ var (
 	serverInstance *chiServer
 	authHttpHandler *handlers.AuthHttpHandler
 	companyHttpHandler *handlers.CompanyHttpHandler
+	projectHttpHandler *handlers.ProjectHttpHandler
 )
 
 func NewChiServer(conf *config.Config, db *infrastructure.Database, auth *infrastructure.Auth) *chiServer {
@@ -56,10 +57,13 @@ func (s *chiServer) Start() {
 func initializeHttpHandlers() {
 	userRepository := postgres.NewUserPostgresRepo(*serverInstance.Database)
 	companyRepository := postgres.NewCompanyPostgresRepo(*serverInstance.Database)
+	projectRepository := postgres.NewProjectPostgresRepo(*serverInstance.Database)
 
 	userUsecase := usecases.NewUserUsecase(userRepository, companyRepository)
 	companyUsecase := usecases.NewCompanyUsecase(companyRepository)
+	projectUsecase := usecases.NewProjectUsecase(projectRepository, userRepository, companyRepository)
 
 	authHttpHandler = handlers.NewAuthHttpHandler(*userUsecase)
 	companyHttpHandler = handlers.NewCompanyHttpHandler(*companyUsecase)
+	projectHttpHandler = handlers.NewProjectHttpHandler(*projectUsecase)
 }

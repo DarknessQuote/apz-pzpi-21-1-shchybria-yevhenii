@@ -39,4 +39,14 @@ type (
 		LastName  string `json:"last_name"`
 		Password  string `json:"password"`
 	}
+
+	DeveloperProjectInfoDTO struct {
+		ID uuid.UUID `json:"id"`
+		Username  string `json:"username"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		RoleID    uuid.UUID `json:"role_id"`
+		CompanyID uuid.UUID `json:"company_id"`
+		Points int `json:"points"`
+	}
 )

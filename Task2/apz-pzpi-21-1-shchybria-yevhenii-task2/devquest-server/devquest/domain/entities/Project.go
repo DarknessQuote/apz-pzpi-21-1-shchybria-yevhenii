@@ -6,5 +6,6 @@ type Project struct {
 	ID uuid.UUID `json:"id"`
 	Name string `json:"name"`
 	Description string `json:"description"`
-	Company Company `json:"company"`
+	CompanyID uuid.UUID `json:"company_id"`
+	ManagerID uuid.UUID `json:"manager_id"`
 }

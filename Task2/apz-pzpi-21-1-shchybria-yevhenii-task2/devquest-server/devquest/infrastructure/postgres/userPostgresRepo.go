@@ -24,7 +24,7 @@ func (u *userPostgresRepo) GetUserByUsername(username string) (*entities.User, e
 	defer cancel()
 
 	query := `
-		SELECT id, first_name, last_name, username, password_hash, role_id, company_id, points
+		SELECT id, first_name, last_name, username, password_hash, role_id, company_id
 		FROM users
 		WHERE username = $1
 	`
@@ -73,8 +73,8 @@ func (u *userPostgresRepo) InsertUser(user *models.InsertUserDTO) error {
 
 	execute := `
 		INSERT INTO users
-		(id, username, first_name, last_name, password_hash, role_id, company_id, points)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, 0)
+		(id, username, first_name, last_name, password_hash, role_id, company_id)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 	`
 
 	_, err := u.db.GetDB().ExecContext(ctx, execute, user.ID, user.Username, user.FirstName, user.LastName, user.PasswordHash, user.RoleID, user.CompanyID)
@@ -85,3 +85,27 @@ func (u *userPostgresRepo) InsertUser(user *models.InsertUserDTO) error {
 	return nil
 }
 
+func (u *userPostgresRepo) CheckUserRole(userID uuid.UUID, roleTitle string) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), u.db.GetDBTimeout())
+	defer cancel()
+
+	query := `
+		SELECT u.id
+		FROM users u
+		WHERE u.id = $1
+		AND u.role_id IN (SELECT id FROM roles WHERE title = $2)
+	`
+
+	row := u.db.GetDB().QueryRowContext(ctx, query, userID, roleTitle)
+
+	var existingUserID uuid.UUID
+	err := row.Scan(&existingUserID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return true, nil
+}

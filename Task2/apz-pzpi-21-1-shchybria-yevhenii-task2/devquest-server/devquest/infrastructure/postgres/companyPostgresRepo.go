@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 	"devquest-server/devquest/domain/entities"
 	"devquest-server/devquest/domain/repositories"
 	"devquest-server/devquest/infrastructure"
@@ -63,6 +64,9 @@ func (c *companyPostgresRepo) GetCompanyByID(companyID uuid.UUID) (*entities.Com
 	var company entities.Company
 	err := row.Scan(&company.ID, &company.Name, &company.Owner, &company.Email)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 			return nil, err
 	}
 
