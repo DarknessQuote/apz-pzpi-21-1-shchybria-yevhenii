@@ -1,2 +1,10 @@
 deviceSettings:
-    type: pulse
+    id: f560704a-e8a3-4e92-ac2f-c1c49b263a2c
+    type: Pulse
+
+connectionSettings:
+    serverHost: "http://localhost:8080"
+    connTimeout: 5
+    maxIdleConns: 10
+    idleConnTimeout: 30
+    disableCompression: true

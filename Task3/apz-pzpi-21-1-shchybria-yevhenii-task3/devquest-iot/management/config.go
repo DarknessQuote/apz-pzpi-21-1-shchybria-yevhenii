@@ -1,7 +1,8 @@
-package config
+package management
 
 import (
 	"sync"
+	"time"
 
 	"github.com/spf13/viper"
 )
@@ -11,8 +12,17 @@ type (
 		Type string
 	}
 
+	ConnectionSettings struct {
+		ServerHost string
+		ConnTimeout time.Duration
+		MaxIdleConns int
+		IdleConnTimeout time.Duration
+		DisableCompression bool
+	}
+
 	DeviceConfig struct {
 		DeviceSettings *DeviceSettings
+		ConnectionSettings *ConnectionSettings
 	}
 )
 

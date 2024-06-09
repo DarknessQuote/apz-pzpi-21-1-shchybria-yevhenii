@@ -1,7 +1,7 @@
 package device
 
 import (
-	"devquest-iot/config"
+	"devquest-iot/management"
 	"errors"
 	"math/rand"
 	"sync"
@@ -16,7 +16,7 @@ var (
 	deviceInstance *Device
 )
 
-func GetDevice(config *config.DeviceConfig) IDevice {
+func GetDevice(config *management.DeviceConfig) IDevice {
 	once.Do(func() {
 		deviceInstance = &Device{Type: config.DeviceSettings.Type}
 	})
@@ -25,10 +25,21 @@ func GetDevice(config *config.DeviceConfig) IDevice {
 }
 
 func (d *Device) GetDataFromSensors() (int, error) {
+	var minOptimumRange, maxOptimumRange int
+
 	switch d.Type {
-	case "pulse":
-		return rand.Intn(100 - 60) + 60, nil
-	default:
-		return 0, errors.New("unsupported type of sensor")
+		case "Pulse":
+			minOptimumRange = 60
+			maxOptimumRange = 100
+		case "Illumination":
+			minOptimumRange = 400
+			maxOptimumRange = 500
+		case "Humidity":
+			minOptimumRange = 30
+			maxOptimumRange = 50
+		default:
+			return 0, errors.New("unsupported type of sensor")
 	}
+
+	return rand.Intn(maxOptimumRange - minOptimumRange) + minOptimumRange, nil
 }
