@@ -1,17 +1,25 @@
 package main
 
 import (
+	"devquest-iot/config"
 	"devquest-iot/device"
 	"log"
 )
 
 func main() {
-	currentDevice := device.GetDevice()
+	configInstance, err := config.GetConfig()
+	if err != nil {
+		log.Panicln(err)
+		return
+	}
+
+	currentDevice := device.GetDevice(configInstance)
 	
- 	for _, _ = range make([]int, 10) {
+ 	for range make([]int, 10) {
 		value, err := currentDevice.GetDataFromSensors()
 		if err != nil {
 			log.Panicln(err)
+			return
 		} else {
 			log.Println(value)
 		}

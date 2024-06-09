@@ -1,16 +1,27 @@
 package device
 
 import (
+	"devquest-iot/config"
 	"errors"
 	"math/rand"
+	"sync"
 )
 
 type Device struct {
 	Type string
 }
 
-func GetDevice() IDevice {
-	return &Device{Type: "pulse"}
+var (
+	once sync.Once
+	deviceInstance *Device
+)
+
+func GetDevice(config *config.DeviceConfig) IDevice {
+	once.Do(func() {
+		deviceInstance = &Device{Type: config.DeviceSettings.Type}
+	})
+
+	return deviceInstance
 }
 
 func (d *Device) GetDataFromSensors() (int, error) {
