@@ -1,6 +1,7 @@
 package chiServer
 
 import (
+	"devquest-server/devquest/utils"
 	"devquest-server/server/middleware"
 	"net/http"
 
@@ -26,6 +27,21 @@ func getRoutes() http.Handler {
 		r.Post("/companies", companyHttpHandler.AddCompany)
 		r.Put("/companies/{id}", companyHttpHandler.UpdateCompany)
 		r.Delete("/companies/{id}", companyHttpHandler.DeleteCompany)
+		r.HandleFunc("/admin/data-backup", func (w http.ResponseWriter, r *http.Request) {
+			db := *serverInstance.Database
+
+			err := db.CreateBackup(serverInstance.Config)
+			if err != nil {
+				utils.ErrorJSON(w, err)
+				return
+			}
+
+			res := utils.JSONResponse{
+				Error: false,
+				Message: "backup successfully created",
+			}
+			utils.WriteJSON(w, http.StatusAccepted, res)
+		})
 	})
 
 	mux.Group(func(r chi.Router) {

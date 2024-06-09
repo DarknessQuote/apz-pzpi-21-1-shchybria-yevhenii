@@ -4,9 +4,11 @@ import (
 	"database/sql"
 	"devquest-server/config"
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
+	pgcommands "github.com/habx/pg-commands"
 	_ "github.com/jackc/pgconn"
 	_ "github.com/jackc/pgx/v5"
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -58,4 +60,33 @@ func (p *PostgresDB) GetDB() *sql.DB {
 
 func (p *PostgresDB) GetDBTimeout() time.Duration {
 	return time.Second * 3
+}
+
+func (p *PostgresDB) CreateBackup(conf *config.Config) error {
+	dump, err := pgcommands.NewDump(&pgcommands.Postgres{
+		Host: conf.Database.Host,
+		Port: conf.Database.Port,
+		DB: conf.Database.DBName,
+		Username: conf.Database.User,
+		Password: conf.Database.Password,
+		EnvPassword: conf.Database.Password,
+	})
+	if err != nil {
+		return err
+	}
+
+	dump.EnableVerbose()
+	dump.Options = []string{}
+	dump.SetupFormat("t")
+	dump.SetFileName(fmt.Sprintf(`%v_%v.sql.tar`, dump.DB, time.Now().Unix()))
+	
+	dumpExec := dump.Exec(pgcommands.ExecOptions{StreamPrint: true, StreamDestination: os.Stdout})
+	if dumpExec.Error != nil {
+		fmt.Println(dumpExec.Output)
+		return dumpExec.Error.Err
+	} else {
+		fmt.Println("Dump success")
+		fmt.Println(dumpExec.Output)
+		return nil
+	}
 }
