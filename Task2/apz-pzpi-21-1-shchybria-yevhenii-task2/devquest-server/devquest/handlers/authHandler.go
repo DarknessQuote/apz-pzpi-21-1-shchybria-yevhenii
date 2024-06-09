@@ -6,6 +6,8 @@ import (
 	"devquest-server/devquest/usecases"
 	"devquest-server/devquest/utils"
 	"net/http"
+
+	"github.com/google/uuid"
 )
 
 type AuthHttpHandler struct {
@@ -46,7 +48,18 @@ func (a *AuthHttpHandler) Register(auth *infrastructure.Auth) http.HandlerFunc {
 		refreshCookie := auth.GetRefreshCookie(tokens.RefreshToken)
 		http.SetCookie(w, refreshCookie)
 
-		utils.WriteJSON(w, http.StatusAccepted, tokens)
+		resData := struct {
+			Tokens infrastructure.TokenPairs `json:"tokens"`
+			UserID uuid.UUID `json:"user_id"`
+			RoleTitle string `json:"role"`
+		} {Tokens: tokens, UserID: jwtUser.ID, RoleTitle: jwtUser.RoleTitle}
+
+		res := utils.JSONResponse{
+			Error: false,
+			Data: resData,
+		}
+
+		utils.WriteJSON(w, http.StatusAccepted, res)
 	}
 }
 
@@ -80,7 +93,18 @@ func (a *AuthHttpHandler) Login(auth *infrastructure.Auth) http.HandlerFunc {
 		refreshCookie := auth.GetRefreshCookie(tokens.RefreshToken)
 		http.SetCookie(w, refreshCookie)
 
-		utils.WriteJSON(w, http.StatusAccepted, tokens)
+		resData := struct {
+			Tokens infrastructure.TokenPairs `json:"tokens"`
+			UserID uuid.UUID `json:"user_id"`
+			RoleTitle string `json:"role"`
+		} {Tokens: tokens, UserID: jwtUser.ID, RoleTitle: jwtUser.RoleTitle}
+
+		res := utils.JSONResponse{
+			Error: false,
+			Data: resData,
+		}
+
+		utils.WriteJSON(w, http.StatusAccepted, res)
 	}
 }
 
