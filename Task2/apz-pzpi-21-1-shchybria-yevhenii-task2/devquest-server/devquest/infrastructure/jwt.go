@@ -54,22 +54,22 @@ func InitAuthSettings(conf *config.Config) *Auth {
 }
 
 func (a *Auth) GenerateTokenPairs(user *JWTUser) (TokenPairs, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"typ": "JWT",
+		"name": user.Username,
+		"role": user.RoleTitle,
+		"sub": user.ID.String(),
+		"aud": a.Audience,
+		"iss": a.Issuer,
+		"iat": time.Now().UTC().Unix(),
+		"exp": time.Now().UTC().Add(a.TokenExpiry).Unix(),
+	})
 
-	claims := token.Claims.(jwt.MapClaims)
-	claims["typ"] = "JWT"
-	claims["name"] = user.Username
-	claims["sub"] = user.ID.String()
-	claims["aud"] = a.Audience
-	claims["iss"] = a.Issuer
-	claims["iat"] = time.Now().UTC().Unix()
-	claims["exp"] = time.Now().UTC().Add(a.TokenExpiry).Unix()
-
-	refreshToken := jwt.New(jwt.SigningMethodHS256)
-	refreshTokenClaims := refreshToken.Claims.(jwt.MapClaims)
-	refreshTokenClaims["sub"] = user.ID.String()
-	refreshTokenClaims["iat"] = time.Now().UTC().Unix()
-	refreshTokenClaims["exp"] = time.Now().UTC().Add(a.RefreshExpiry).Unix()
+	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": user.ID.String(),
+		"iat": time.Now().UTC().Unix(),
+		"exp": time.Now().UTC().Add(a.RefreshExpiry).Unix(),
+	})
 
 	signedAccessToken, err := token.SignedString([]byte(a.Secret))
 	if err != nil {
@@ -89,37 +89,32 @@ func (a *Auth) GenerateTokenPairs(user *JWTUser) (TokenPairs, error) {
 	return tokenPairs, nil
 }
 
-func (a *Auth) VerifyTokenHeader(w http.ResponseWriter, r *http.Request) (string, *Claims, error) {
+func (a *Auth) GetTokenFromHeader(w http.ResponseWriter, r *http.Request) (*jwt.Token, error) {
 	w.Header().Add("Vary", "Authorization")
 
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
-		return "", nil, errors.New("no auth header")
+		return nil, errors.New("no auth header")
 	}
 
 	headerParts := strings.Split(authHeader, " ")
 	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
-		return "", nil, errors.New("invalid auth header")
+		return nil, errors.New("invalid auth header")
 	}
 
-	token := headerParts[1]
-	claims := &Claims{}
+	stringToken := headerParts[1]
 
-	_, err := jwt.ParseWithClaims(token, claims, func (token *jwt.Token) (any, error) {
+	token, err := jwt.Parse(stringToken, func (token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		return []byte(a.Secret), nil
 	})
 	if err != nil {
-		return "", nil, err
+		return nil, err
 	}
 
-	if claims.Issuer != a.Issuer {
-		return "", nil, errors.New("invalid issuer")
-	}
-
-	return token, claims, nil
+	return token, nil
 }
 
 func (a *Auth) GetRefreshCookie(refreshToken string) *http.Cookie {

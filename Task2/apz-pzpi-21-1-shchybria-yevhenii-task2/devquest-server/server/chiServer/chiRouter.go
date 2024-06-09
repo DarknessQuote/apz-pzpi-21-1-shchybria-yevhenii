@@ -8,59 +8,62 @@ import (
 )
 func getRoutes() http.Handler {
 	mux := chi.NewMux()
+	authSettings := GetChiServer().AuthSettings
 
 	mux.Use(middleware.EnableCORS)
-	
-	mux.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello World"))
+
+	mux.Group(func(r chi.Router) {
+		r.Post("/auth/login", authHttpHandler.Login(authSettings))
+		r.Post("/auth/register", authHttpHandler.Register(authSettings))
+		r.Delete("/auth/logout", authHttpHandler.Logout(authSettings))
+		r.Get("/companies", companyHttpHandler.GetAllCompanies)
 	})
 
-	mux.Route("/auth", func(r chi.Router) {
-		authSettings := GetChiServer().AuthSettings
+	mux.Group(func(r chi.Router) {
+		r.Use(middleware.RolesRequired(*authSettings, "Admin"))
 
-		r.Post("/login", authHttpHandler.Login(authSettings))
-		r.Post("/register", authHttpHandler.Register(authSettings))
-		r.Delete("/logout", authHttpHandler.Logout(authSettings))
-	})
-	
-	mux.Route("/companies", func(r chi.Router) {
-		r.Get("/", companyHttpHandler.GetAllCompanies)
-		r.Get("/{id}", companyHttpHandler.GetCompanyByID)
-		r.Post("/", companyHttpHandler.AddCompany)
-		r.Put("/{id}", companyHttpHandler.UpdateCompany)
-		r.Delete("/{id}", companyHttpHandler.DeleteCompany)
+		r.Get("/companies/{id}", companyHttpHandler.GetCompanyByID)
+		r.Post("/companies", companyHttpHandler.AddCompany)
+		r.Put("/companies/{id}", companyHttpHandler.UpdateCompany)
+		r.Delete("/companies/{id}", companyHttpHandler.DeleteCompany)
 	})
 
-	mux.Route("/projects", func(r chi.Router) {
-		r.Get("/manager/{manager_id}", projectHttpHandler.GetProjectsOfManager)
-		r.Get("/developer/{developer_id}", projectHttpHandler.GetProjectsOfDeveloper)
-		
-		r.Put("/{id}", projectHttpHandler.UpdateProject)
-		r.Post("/", projectHttpHandler.AddProject)
-		r.Delete("/{id}", projectHttpHandler.DeleteProject)
+	mux.Group(func(r chi.Router) {
+		r.Use(middleware.RolesRequired(*authSettings, "Manager,Developer"))
 
-		r.Get("/developers/{project_id}", projectHttpHandler.GetProjectDevelopers)
-		r.Post("/developers", projectHttpHandler.AddDeveloperToProject)
-		r.Delete("/developers", projectHttpHandler.RemoveDeveloperFromProject)
+		r.Get("/projects/developers/{project_id}", projectHttpHandler.GetProjectDevelopers)
+		r.Get("/tasks/{project_id}", taskHttpHandler.GetProjectTasks)
+		r.Get("/achievements/project/{project_id}", achievementHttpHandler.GetProjectAchievements)
+		r.Get("/achievements/developer/{developer_id}", achievementHttpHandler.GetDeveloperAchievements)
 	})
 
-	mux.Route("/achievements", func(r chi.Router) {
-		r.Get("/project/{project_id}", achievementHttpHandler.GetProjectAchievements)
-		r.Get("/developer/{developer_id}", achievementHttpHandler.GetDeveloperAchievements)
-		r.Post("/{project_id}", achievementHttpHandler.AddAchievementToProject)
-		r.Put("/{id}", achievementHttpHandler.UpdateAchievement)
-		r.Delete("/{id}", achievementHttpHandler.DeleteAchievement)
-		r.Post("/give", achievementHttpHandler.GiveAchievementToDeveloper)
+	mux.Group(func(r chi.Router) {
+		r.Use(middleware.RolesRequired(*authSettings, "Manager"))
+
+		r.Get("/projects/manager/{manager_id}", projectHttpHandler.GetProjectsOfManager)
+		r.Put("/projects/{id}", projectHttpHandler.UpdateProject)
+		r.Post("/projects", projectHttpHandler.AddProject)
+		r.Delete("/projects/{id}", projectHttpHandler.DeleteProject)
+		r.Post("/projects/developers", projectHttpHandler.AddDeveloperToProject)
+		r.Delete("/projects/developers", projectHttpHandler.RemoveDeveloperFromProject)
+
+		r.Post("/tasks/{project_id}", taskHttpHandler.CreateNewTask)
+		r.Put("/tasks/{id}", taskHttpHandler.UpdateTask)
+		r.Delete("/tasks/{id}", taskHttpHandler.DeleteTask)
+		r.Post("/tasks/category/", taskHttpHandler.CreateNewTaskCategory)
+
+		r.Post("/achievements/{project_id}", achievementHttpHandler.AddAchievementToProject)
+		r.Put("/achievements/{id}", achievementHttpHandler.UpdateAchievement)
+		r.Delete("/achievements/{id}", achievementHttpHandler.DeleteAchievement)
+		r.Post("/achievements/give", achievementHttpHandler.GiveAchievementToDeveloper)
 	})
 
-	mux.Route("/tasks", func(r chi.Router) {
-		r.Get("/{project_id}", taskHttpHandler.GetProjectTasks)
-		r.Post("/{project_id}", taskHttpHandler.CreateNewTask)
-		r.Put("/{id}", taskHttpHandler.UpdateTask)
-		r.Delete("/{id}", taskHttpHandler.DeleteTask)
-		r.Put("/accept", taskHttpHandler.AcceptTask)
-		r.Put("/complete", taskHttpHandler.CompleteTask)
-		r.Post("/category/", taskHttpHandler.CreateNewTaskCategory)
+	mux.Group(func(r chi.Router) {
+		r.Use(middleware.RolesRequired(*authSettings, "Developer"))
+
+		r.Get("/projects/developer/{developer_id}", projectHttpHandler.GetProjectsOfDeveloper)
+		r.Put("/tasks/accept", taskHttpHandler.AcceptTask)
+		r.Put("/tasks/complete", taskHttpHandler.CompleteTask)
 	})
 
 	return mux

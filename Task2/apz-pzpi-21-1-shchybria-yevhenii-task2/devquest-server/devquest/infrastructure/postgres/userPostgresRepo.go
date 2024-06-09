@@ -32,7 +32,7 @@ func (u *userPostgresRepo) GetUserByUsername(username string) (*entities.User, e
 	row := u.db.GetDB().QueryRowContext(ctx, query, username)
 
 	var user entities.User
-	err := row.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Username, &user.PasswordHash, &user.RoleID, &user.CompanyID, &user.Points)
+	err := row.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Username, &user.PasswordHash, &user.RoleID, &user.CompanyID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
