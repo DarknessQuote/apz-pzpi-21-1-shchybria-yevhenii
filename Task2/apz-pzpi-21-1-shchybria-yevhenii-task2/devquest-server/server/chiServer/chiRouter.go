@@ -53,5 +53,15 @@ func getRoutes() http.Handler {
 		r.Post("/give", achievementHttpHandler.GiveAchievementToDeveloper)
 	})
 
+	mux.Route("/tasks", func(r chi.Router) {
+		r.Get("/{project_id}", taskHttpHandler.GetProjectTasks)
+		r.Post("/{project_id}", taskHttpHandler.CreateNewTask)
+		r.Put("/{id}", taskHttpHandler.UpdateTask)
+		r.Delete("/{id}", taskHttpHandler.DeleteTask)
+		r.Put("/accept", taskHttpHandler.AcceptTask)
+		r.Put("/complete", taskHttpHandler.CompleteTask)
+		r.Post("/category/", taskHttpHandler.CreateNewTaskCategory)
+	})
+
 	return mux
 }

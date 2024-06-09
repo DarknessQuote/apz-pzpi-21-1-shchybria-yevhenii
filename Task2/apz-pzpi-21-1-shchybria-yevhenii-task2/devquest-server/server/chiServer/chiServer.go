@@ -25,6 +25,7 @@ var (
 	companyHttpHandler *handlers.CompanyHttpHandler
 	projectHttpHandler *handlers.ProjectHttpHandler
 	achievementHttpHandler *handlers.AchievementHttpHandler
+	taskHttpHandler *handlers.TaskHttpHandler
 )
 
 func NewChiServer(conf *config.Config, db *infrastructure.Database, auth *infrastructure.Auth) *chiServer {
@@ -60,14 +61,17 @@ func initializeHttpHandlers() {
 	companyRepository := postgres.NewCompanyPostgresRepo(*serverInstance.Database)
 	projectRepository := postgres.NewProjectPostgresRepo(*serverInstance.Database)
 	achievementRepository := postgres.NewAchievementPostgresRepo(*serverInstance.Database)
+	taskRepository := postgres.NewTaskPostgresRepo(*serverInstance.Database)
 
 	userUsecase := usecases.NewUserUsecase(userRepository, companyRepository)
 	companyUsecase := usecases.NewCompanyUsecase(companyRepository)
 	projectUsecase := usecases.NewProjectUsecase(projectRepository, userRepository, companyRepository)
 	achievementUsecase := usecases.NewAchievementUsecase(achievementRepository, projectRepository, userRepository)
+	taskUsecase := usecases.NewTaskUsecase(taskRepository, projectRepository, userRepository)
 
 	authHttpHandler = handlers.NewAuthHttpHandler(*userUsecase)
 	companyHttpHandler = handlers.NewCompanyHttpHandler(*companyUsecase)
 	projectHttpHandler = handlers.NewProjectHttpHandler(*projectUsecase)
 	achievementHttpHandler = handlers.NewAchievementHttpHandler(*achievementUsecase)
+	taskHttpHandler = handlers.NewTaskHttpHandler(*taskUsecase)
 }
