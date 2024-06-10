@@ -18,6 +18,10 @@ func getRoutes() http.Handler {
 		r.Post("/auth/register", authHttpHandler.Register(authSettings))
 		r.Delete("/auth/logout", authHttpHandler.Logout(authSettings))
 		r.Get("/companies", companyHttpHandler.GetAllCompanies)
+
+		r.Put("/measure/add-owner", measurementHttpHander.AddOwnerToDevice)
+		r.Post("/measure", measurementHttpHander.AddMeasurementResult)
+		r.Get("/measure/{developer_id}", measurementHttpHander.GetLatestMeasurementsForDeveloper)
 	})
 
 	mux.Group(func(r chi.Router) {
