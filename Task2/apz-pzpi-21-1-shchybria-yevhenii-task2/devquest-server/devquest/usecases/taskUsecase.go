@@ -29,6 +29,10 @@ func (t *TaskUsecase) GetProjectTasks(projectID uuid.UUID) ([]*models.GetTaskDTO
 	}
 
 	projectTasks, err := t.taskRepo.GetProjectTasks(projectID)
+	if err != nil {
+		return nil, err
+	}
+	
 	return projectTasks, nil
 }
 
