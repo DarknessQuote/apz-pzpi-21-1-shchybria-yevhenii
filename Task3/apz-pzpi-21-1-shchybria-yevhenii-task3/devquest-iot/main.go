@@ -3,6 +3,7 @@ package main
 import (
 	"devquest-iot/device"
 	"devquest-iot/management"
+	"devquest-iot/network"
 	"log"
 )
 
@@ -24,4 +25,15 @@ func main() {
 			log.Println(value)
 		}
  	}
+
+	httpConnection := management.NewHttpConnection(configInstance)
+	requestSender := network.NewRequestSender(httpConnection, configInstance)
+
+	res, err := requestSender.RegisterOwner("grimerssy", "12345678")
+	if err != nil {
+		log.Panicln(err)
+		return
+	}
+
+	log.Printf(res.Message)
 }

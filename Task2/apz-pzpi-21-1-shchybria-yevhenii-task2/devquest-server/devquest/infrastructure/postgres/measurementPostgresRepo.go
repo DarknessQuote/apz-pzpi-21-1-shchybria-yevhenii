@@ -47,7 +47,7 @@ func (m *MeasurementPostgresRepo) GetTypeByID(typeID uuid.UUID) (*entities.Measu
 	defer cancel()
 
 	query := `
-		SELECT id, name, minimum_norm, maximum_norm,
+		SELECT id, name, minimum_norm, maximum_norm
 		FROM measurement_types
 		WHERE id = $1
 	`
@@ -71,7 +71,7 @@ func (m *MeasurementPostgresRepo) GetTypeByName(typeName string) (*entities.Meas
 	defer cancel()
 
 	query := `
-		SELECT id, name, minimum_norm, maximum_norm,
+		SELECT id, name, minimum_norm, maximum_norm
 		FROM measurement_types
 		WHERE name = $1
 	`

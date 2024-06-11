@@ -9,6 +9,7 @@ import (
 
 type (
 	DeviceSettings struct {
+		ID string
 		Type string
 	}
 
