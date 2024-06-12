@@ -24,7 +24,7 @@ func GetDevice(config *management.DeviceConfig) IDevice {
 	return deviceInstance
 }
 
-func (d *Device) GetDataFromSensors() (int, error) {
+func (d *Device) GetDataFromSensors() (float64, error) {
 	var minOptimumRange, maxOptimumRange int
 
 	switch d.Type {
@@ -41,5 +41,5 @@ func (d *Device) GetDataFromSensors() (int, error) {
 			return 0, errors.New("unsupported type of sensor")
 	}
 
-	return rand.Intn(maxOptimumRange - minOptimumRange) + minOptimumRange, nil
+	return float64(rand.Intn(maxOptimumRange - minOptimumRange) + minOptimumRange), nil
 }

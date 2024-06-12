@@ -1,5 +1,5 @@
 package device
 
 type IDevice interface {
-	GetDataFromSensors() (int, error)
+	GetDataFromSensors() (float64, error)
 }
