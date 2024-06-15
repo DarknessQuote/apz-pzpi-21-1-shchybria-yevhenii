@@ -33,15 +33,16 @@ func (m *MeasurementHttpHandler) AddOwnerToDevice(w http.ResponseWriter, r *http
 		return
 	}
 
-	err = m.measurementUsecase.AddOwnerToDevice(deviceOwnerInfo)
+	userID, err := m.measurementUsecase.AddOwnerToDevice(deviceOwnerInfo)
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
 	}
 
-	res := utils.JSONResponse{
-		Error: false,
-		Message: "owner successfully added to device",
+	res := struct {
+		UserID uuid.UUID `json:"user_id"`
+	} {
+		UserID: userID,
 	}
 
 	_ = utils.WriteJSON(w, http.StatusAccepted, res)

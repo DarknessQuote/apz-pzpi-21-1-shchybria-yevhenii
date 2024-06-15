@@ -19,50 +19,50 @@ func NewMeasurementUsecase(mRepo repositories.MeasurementRepo, uRepo repositorie
 	return &MeasurementUsecase{measurementRepo: mRepo, userRepo: uRepo}
 }
 
-func (m *MeasurementUsecase) AddOwnerToDevice(deviceOwnerInfo models.AddOwnerToDeviceDTO) error {
+func (m *MeasurementUsecase) AddOwnerToDevice(deviceOwnerInfo models.AddOwnerToDeviceDTO) (uuid.UUID, error) {
 	deviceType, err := m.measurementRepo.GetTypeByName(deviceOwnerInfo.DeviceType)
 	if err != nil {
-		return err
+		return uuid.Nil, err
 	}
 	if deviceType == nil {
-		return errors.New("device type does not exist")
+		return uuid.Nil, errors.New("device type does not exist")
 	}
 
 	device, err := m.measurementRepo.CheckForDevice(deviceOwnerInfo.DeviceID, deviceType.ID)
 	if err != nil {
-		return err
+		return uuid.Nil, err
 	}
 	if !device {
-		return errors.New("device does not exist")
+		return uuid.Nil, errors.New("device does not exist")
 	}
 
 	user, err := m.userRepo.GetUserByUsername(deviceOwnerInfo.Username)
 	if err != nil {
-		return err
+		return uuid.Nil, err
 	}
 	if user == nil {
-		return errors.New("user does not exist")
+		return uuid.Nil, errors.New("user does not exist")
 	}
 	
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(deviceOwnerInfo.Password))
 	if err != nil {
-		return err
+		return uuid.Nil, err
 	}
 
 	isDeveloper, err := m.userRepo.CheckUserRole(user.ID, "Developer")
 	if err != nil {
-		return err
+		return uuid.Nil, err
 	}
 	if !isDeveloper {
-		return errors.New("can't register device as a non-developer")
+		return uuid.Nil, errors.New("can't register device as a non-developer")
 	}
 
 	err = m.measurementRepo.AddOwnerToDevice(deviceOwnerInfo.DeviceID, user.ID)
 	if err != nil {
-		return err
+		return uuid.Nil, err
 	}
 
-	return nil
+	return user.ID, nil
 }
 
 func (m *MeasurementUsecase) AddMeasurementResult(measurementInfo models.CreateMeasurementDTO) error {
