@@ -62,8 +62,8 @@ func (p *PostgresDB) GetDBTimeout() time.Duration {
 	return time.Second * 3
 }
 
-func (p *PostgresDB) CreateBackup(conf *config.Config) error {
-	dump, err := pgcommands.NewDump(&pgcommands.Postgres{
+func (p *PostgresDB) CreateBackup(conf *config.Config) pgcommands.Result {
+	dump, _ := pgcommands.NewDump(&pgcommands.Postgres{
 		Host: conf.Database.Host,
 		Port: conf.Database.Port,
 		DB: conf.Database.DBName,
@@ -71,22 +71,14 @@ func (p *PostgresDB) CreateBackup(conf *config.Config) error {
 		Password: conf.Database.Password,
 		EnvPassword: conf.Database.Password,
 	})
-	if err != nil {
-		return err
-	}
 
-	dump.EnableVerbose()
+	currentDir, _ := os.Getwd()
+
 	dump.Options = []string{}
 	dump.SetupFormat("t")
 	dump.SetFileName(fmt.Sprintf(`%v_%v.sql.tar`, dump.DB, time.Now().Unix()))
+	dump.SetPath(fmt.Sprintf("%s\\backups\\", currentDir))
 	
 	dumpExec := dump.Exec(pgcommands.ExecOptions{StreamPrint: true, StreamDestination: os.Stdout})
-	if dumpExec.Error != nil {
-		fmt.Println(dumpExec.Output)
-		return dumpExec.Error.Err
-	} else {
-		fmt.Println("Dump success")
-		fmt.Println(dumpExec.Output)
-		return nil
-	}
+	return dumpExec
 }

@@ -22,6 +22,7 @@ var (
 	once sync.Once;
 	serverInstance *chiServer
 	userHttpHandler *handlers.UserHttpHandler
+	adminHttpHander *handlers.AdminHttpHandler
 	companyHttpHandler *handlers.CompanyHttpHandler
 	projectHttpHandler *handlers.ProjectHttpHandler
 	achievementHttpHandler *handlers.AchievementHttpHandler
@@ -73,6 +74,7 @@ func initializeHttpHandlers() {
 	measurementUsecase := usecases.NewMeasurementUsecase(measurementRepository, userRepository)
 
 	userHttpHandler = handlers.NewUserHttpHandler(*userUsecase)
+	adminHttpHander = handlers.NewAdminHttpHandler(*serverInstance.Database, serverInstance.Config)
 	companyHttpHandler = handlers.NewCompanyHttpHandler(*companyUsecase)
 	projectHttpHandler = handlers.NewProjectHttpHandler(*projectUsecase)
 	achievementHttpHandler = handlers.NewAchievementHttpHandler(*achievementUsecase)
