@@ -10,14 +10,14 @@ type (
 	CreateMeasurementDTO struct {
 		DeviceID uuid.UUID `json:"device_id"`
 		MeasuredAt time.Time `json:"measured_at"`
-		Value float32 `json:"value"`
+		Value float64 `json:"value"`
 	}
 
 	GetMeasurementDTO struct {
 		ID uuid.UUID `json:"id"`
 		TypeName string `json:"type_name"`
 		MeasuredAt time.Time `json:"measured_at"`
-		Value float32 `json:"value"`
+		Value float64 `json:"value"`
 		Message string `json:"message"`
 	}
 

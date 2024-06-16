@@ -17,13 +17,13 @@ type (
 		ID uuid.UUID `json:"id"`
 		DeviceID uuid.UUID `json:"device_id"`
 		MeasuredAt time.Time `json:"measured_at"`
-		Value float32 `json:"value"`
+		Value float64 `json:"value"`
 	}
 
 	MeasurementType struct {
 		ID uuid.UUID `json:"id"`
 		Name string `json:"name"`
-		MinimumNorm float32 `json:"minimum_norm"`
-		MaximumNorm float32 `json:"maximum_norm"`
+		MinimumNorm float64 `json:"minimum_norm"`
+		MaximumNorm float64 `json:"maximum_norm"`
 	}
 )
