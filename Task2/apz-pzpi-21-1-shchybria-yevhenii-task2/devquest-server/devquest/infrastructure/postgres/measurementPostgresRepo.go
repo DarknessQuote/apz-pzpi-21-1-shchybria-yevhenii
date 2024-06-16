@@ -23,7 +23,7 @@ func (m *MeasurementPostgresRepo) GetDeviceByID(deviceID uuid.UUID) (*entities.M
 	defer cancel()
 
 	query := `
-		SELECT id, type_id, owner_id,
+		SELECT id, type_id, owner_id
 		FROM measurement_devices
 		WHERE id = $1
 	`
