@@ -155,14 +155,15 @@ func (m *MeasurementPostgresRepo) GetLatestMeasurementsForDeveloper(developerID 
 	defer cancel()
 
 	query := `
-		SELECT m.id, m.device_id, m.measured_at, m.value,
+		SELECT m.id, m.device_id, m.measured_at, m.value
 		FROM measurements m
 		LEFT JOIN measurement_devices md ON m.device_id = md.id
 		WHERE m.measured_at = (
 			SELECT MAX(m2.measured_at)
 			FROM measurements m2
 			LEFT JOIN measurement_devices md2 ON m2.device_id = md2.id
-			WHERE m2.type_id = m.type_id
+			WHERE md2.type_id = md.type_id
+			AND md2.owner_id = $1
 		)
 	`
 
