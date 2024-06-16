@@ -8,9 +8,12 @@ import (
 )
 
 type UserRepo interface {
+	GetUserByID(id uuid.UUID) (*entities.User, error)
 	GetUserByUsername(username string) (*entities.User, error)
-	GetRoleByID(roleID uuid.UUID) (*entities.Role, error)
-	CheckUserRole(userID uuid.UUID, roleTitle string) (bool, error)
-
+	GetDevelopersByCompany(companyID uuid.UUID) ([]*entities.User, error)
 	InsertUser(user *models.InsertUserDTO) error
+	CheckUserRole(userID uuid.UUID, roleTitle string) (bool, error)
+	
+	GetRolesForRegistration() ([]*entities.Role, error)
+	GetRoleByID(roleID uuid.UUID) (*entities.Role, error)
 }

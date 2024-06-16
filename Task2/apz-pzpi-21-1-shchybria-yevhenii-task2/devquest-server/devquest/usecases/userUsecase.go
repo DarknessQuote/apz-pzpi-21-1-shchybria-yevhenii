@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"devquest-server/devquest/domain/entities"
 	"devquest-server/devquest/domain/models"
 	"devquest-server/devquest/domain/repositories"
 	"errors"
@@ -94,4 +95,38 @@ func (u *UserUsecase) LoginUser(userLoginInfo models.LoginUserDTO) (*models.JwtU
 		Username: existingUser.Username,
 		RoleTitle: role.Title,
 	}, nil
+}
+
+func (u *UserUsecase) GetDevelopersForManager(managerID uuid.UUID) ([]*entities.User, error) {
+	manager, err := u.userRepo.GetUserByID(managerID)
+	if err != nil {
+		return nil, err
+	}
+	if manager == nil {
+		return nil, errors.New("user does not exist")
+	}
+	
+	company, err := u.companyRepo.GetCompanyByID(manager.CompanyID)
+	if err != nil {
+		return nil, err
+	}
+	if company == nil {
+		return nil, errors.New("company does not exist")
+	}
+
+	developers, err := u.userRepo.GetDevelopersByCompany(manager.CompanyID)
+	if err != nil {
+		return nil, err
+	}
+
+	return developers, nil
+}
+
+func (u *UserUsecase) GetRolesForRegistration() ([]*entities.Role, error) {
+	roles, err := u.userRepo.GetRolesForRegistration()
+	if err != nil {
+		return nil, err
+	}
+
+	return roles, nil
 }

@@ -14,9 +14,10 @@ func getRoutes() http.Handler {
 	mux.Use(middleware.EnableCORS)
 
 	mux.Group(func(r chi.Router) {
-		r.Post("/auth/login", authHttpHandler.Login(authSettings))
-		r.Post("/auth/register", authHttpHandler.Register(authSettings))
-		r.Delete("/auth/logout", authHttpHandler.Logout(authSettings))
+		r.Post("/auth/login", userHttpHandler.Login(authSettings))
+		r.Post("/auth/register", userHttpHandler.Register(authSettings))
+		r.Delete("/auth/logout", userHttpHandler.Logout(authSettings))
+		r.Get("/auth/roles", userHttpHandler.GetRolesForRegistration)
 		r.Get("/companies", companyHttpHandler.GetAllCompanies)
 
 		r.Put("/measure/add-owner", measurementHttpHander.AddOwnerToDevice)
@@ -59,6 +60,8 @@ func getRoutes() http.Handler {
 
 	mux.Group(func(r chi.Router) {
 		r.Use(middleware.RolesRequired(*authSettings, "Manager"))
+
+		r.Get("/projects/available-developers/{manager_id}", userHttpHandler.GetDevelopersForManager)
 
 		r.Get("/projects/manager/{manager_id}", projectHttpHandler.GetProjectsOfManager)
 		r.Put("/projects/{id}", projectHttpHandler.UpdateProject)

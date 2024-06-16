@@ -21,7 +21,7 @@ type chiServer struct {
 var (
 	once sync.Once;
 	serverInstance *chiServer
-	authHttpHandler *handlers.AuthHttpHandler
+	userHttpHandler *handlers.UserHttpHandler
 	companyHttpHandler *handlers.CompanyHttpHandler
 	projectHttpHandler *handlers.ProjectHttpHandler
 	achievementHttpHandler *handlers.AchievementHttpHandler
@@ -72,7 +72,7 @@ func initializeHttpHandlers() {
 	taskUsecase := usecases.NewTaskUsecase(taskRepository, projectRepository, userRepository)
 	measurementUsecase := usecases.NewMeasurementUsecase(measurementRepository, userRepository)
 
-	authHttpHandler = handlers.NewAuthHttpHandler(*userUsecase)
+	userHttpHandler = handlers.NewUserHttpHandler(*userUsecase)
 	companyHttpHandler = handlers.NewCompanyHttpHandler(*companyUsecase)
 	projectHttpHandler = handlers.NewProjectHttpHandler(*projectUsecase)
 	achievementHttpHandler = handlers.NewAchievementHttpHandler(*achievementUsecase)

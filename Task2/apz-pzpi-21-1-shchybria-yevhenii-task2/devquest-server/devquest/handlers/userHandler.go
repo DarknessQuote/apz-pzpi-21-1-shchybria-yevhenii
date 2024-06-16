@@ -7,18 +7,19 @@ import (
 	"devquest-server/devquest/utils"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 )
 
-type AuthHttpHandler struct {
+type UserHttpHandler struct {
 	userUsecase usecases.UserUsecase
 }
 
-func NewAuthHttpHandler(userUsecase usecases.UserUsecase) *AuthHttpHandler {
-	return &AuthHttpHandler{userUsecase: userUsecase}
+func NewUserHttpHandler(userUsecase usecases.UserUsecase) *UserHttpHandler {
+	return &UserHttpHandler{userUsecase: userUsecase}
 }
 
-func (a *AuthHttpHandler) Register(auth *infrastructure.Auth) http.HandlerFunc {
+func (u *UserHttpHandler) Register(auth *infrastructure.Auth) http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {
 		var userRegisterInfo models.RegisterUserDTO
 
@@ -27,7 +28,7 @@ func (a *AuthHttpHandler) Register(auth *infrastructure.Auth) http.HandlerFunc {
 			return
 		}
 
-		jwtUserData, err := a.userUsecase.RegisterUser(userRegisterInfo)
+		jwtUserData, err := u.userUsecase.RegisterUser(userRegisterInfo)
 		if err != nil {
 			utils.ErrorJSON(w, err)
 			return
@@ -63,7 +64,7 @@ func (a *AuthHttpHandler) Register(auth *infrastructure.Auth) http.HandlerFunc {
 	}
 }
 
-func (a *AuthHttpHandler) Login(auth *infrastructure.Auth) http.HandlerFunc {
+func (u *UserHttpHandler) Login(auth *infrastructure.Auth) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var userLoginInfo models.LoginUserDTO
 
@@ -72,7 +73,7 @@ func (a *AuthHttpHandler) Login(auth *infrastructure.Auth) http.HandlerFunc {
 			return
 		}
 
-		jwtUserData, err := a.userUsecase.LoginUser(userLoginInfo)
+		jwtUserData, err := u.userUsecase.LoginUser(userLoginInfo)
 		if err != nil {
 			utils.ErrorJSON(w, err)
 			return
@@ -108,9 +109,35 @@ func (a *AuthHttpHandler) Login(auth *infrastructure.Auth) http.HandlerFunc {
 	}
 }
 
-func (a *AuthHttpHandler) Logout(auth *infrastructure.Auth) http.HandlerFunc {
+func (u *UserHttpHandler) Logout(auth *infrastructure.Auth) http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, auth.GetExpiredRefreshCookie())
 		w.WriteHeader(http.StatusAccepted)
 	}
+}
+
+func (u *UserHttpHandler) GetDevelopersForManager(w http.ResponseWriter, r *http.Request) {
+	managerID, err := uuid.Parse(chi.URLParam(r, "manager_id"))
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	developers, err := u.userUsecase.GetDevelopersForManager(managerID)
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	_ = utils.WriteJSON(w, http.StatusAccepted, developers)
+}
+
+func (u *UserHttpHandler) GetRolesForRegistration(w http.ResponseWriter, r *http.Request) {
+	roles, err := u.userUsecase.GetRolesForRegistration()
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	_ = utils.WriteJSON(w, http.StatusAccepted, roles)
 }
