@@ -4,7 +4,10 @@ deviceSettings:
 
 connectionSettings:
     serverHost: "http://localhost:8080"
+    requestInterval: 30
     connTimeout: 20
     maxIdleConns: 10
     idleConnTimeout: 30
     disableCompression: true
+
+userID: e90d4d9d-d0f0-43f5-a6d5-67b9c93fc0f4

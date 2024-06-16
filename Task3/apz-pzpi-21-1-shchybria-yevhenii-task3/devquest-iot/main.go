@@ -2,9 +2,7 @@ package main
 
 import (
 	"devquest-iot/app"
-	"devquest-iot/device"
 	"devquest-iot/management"
-	"fmt"
 	"log"
 )
 
@@ -15,9 +13,11 @@ func main() {
 		return
 	}
 
-	currentDevice := device.GetDevice(configInstance)
+	app := app.CreateAppInstance(configInstance)
 	
- 	dataProcessor := app.NewDataProcessor(currentDevice)
-	avgValue, _ := dataProcessor.GetAverageValueFromSensors()
-	log.Println(fmt.Sprintf("Average value: %f", avgValue))
+	err = app.Start()
+	if err != nil {
+		log.Panicln(err)
+		return
+	}
 }

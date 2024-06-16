@@ -2,7 +2,6 @@ package app
 
 import (
 	"devquest-iot/device"
-	"fmt"
 	"log"
 	"math"
 	"time"
@@ -25,7 +24,7 @@ func (p *DataProcessor) GetAverageValueFromSensors() (float64, error) {
 			return 0, err
 		}
 
-		log.Println(fmt.Sprintf("Data point: %.2f", data))
+		log.Printf("Data point: %.2f", data)
 		sensorData = append(sensorData, data)
 		time.Sleep(time.Second * 1)
 	}

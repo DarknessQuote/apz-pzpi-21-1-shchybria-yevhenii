@@ -15,6 +15,7 @@ type (
 
 	ConnectionSettings struct {
 		ServerHost string
+		RequestInterval time.Duration
 		ConnTimeout time.Duration
 		MaxIdleConns int
 		IdleConnTimeout time.Duration
@@ -24,6 +25,7 @@ type (
 	DeviceConfig struct {
 		DeviceSettings *DeviceSettings
 		ConnectionSettings *ConnectionSettings
+		UserID string
 	}
 )
 
@@ -38,6 +40,7 @@ func GetConfig() (*DeviceConfig, error) {
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
 		viper.AddConfigPath("./")
+		viper.SetDefault("userID", "")
 
 		if err := viper.ReadInConfig(); err != nil {
 			configError = err
@@ -51,4 +54,15 @@ func GetConfig() (*DeviceConfig, error) {
 	})
 
 	return configInstance, configError
+}
+
+func (c *DeviceConfig) SetConfigValue(key string, value any) error {
+	viper.Set(key, value)
+	viper.WriteConfig()
+
+	if err := viper.Unmarshal(&configInstance); err != nil {
+		return err
+	}
+
+	return nil
 }

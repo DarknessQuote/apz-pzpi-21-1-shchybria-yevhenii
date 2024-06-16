@@ -18,7 +18,7 @@ func NewRequestSender(conn *management.HttpConnection, conf *management.DeviceCo
 	return &RequestSender{connection: conn, config: conf}
 }
 
-func (r *RequestSender) RegisterOwner(username string, password string) (*JSONResponse, error) {
+func (r *RequestSender) RegisterOwner(username string, password string) (*RegisterOwnerResponse, error) {
 	jsonBody := []byte(fmt.Sprintf(`{
 		"device_type": "%s",
 		"username": "%s",
@@ -40,7 +40,7 @@ func (r *RequestSender) RegisterOwner(username string, password string) (*JSONRe
 	}
 	defer res.Body.Close()
 
-	var resBody JSONResponse
+	var resBody RegisterOwnerResponse
 	err = json.NewDecoder(res.Body).Decode(&resBody)
 	if err != nil {
 		return nil, err
@@ -49,7 +49,7 @@ func (r *RequestSender) RegisterOwner(username string, password string) (*JSONRe
 	return &resBody, nil
 }
 
-func (r *RequestSender) SendMeasurement(value float32) (*JSONResponse, error) {
+func (r *RequestSender) SendMeasurement(value float64) (*AddMeasurementResponse, error) {
 	jsonBody := []byte(fmt.Sprintf(`{
 		"measured_at": "%s",
 		"value": %.2f
@@ -70,7 +70,7 @@ func (r *RequestSender) SendMeasurement(value float32) (*JSONResponse, error) {
 	}
 	defer res.Body.Close()
 
-	var resBody JSONResponse
+	var resBody AddMeasurementResponse
 	err = json.NewDecoder(res.Body).Decode(&resBody)
 	if err != nil {
 		return nil, err
