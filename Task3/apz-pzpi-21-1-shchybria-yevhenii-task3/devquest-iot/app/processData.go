@@ -18,7 +18,7 @@ func NewDataProcessor(dev device.IDevice) *DataProcessor {
 func (p *DataProcessor) GetAverageValueFromSensors() (float64, error) {
 	var sensorData []float64
 
-	for range make([]int, 40) {
+	for range make([]int, 20) {
 		data, err := p.device.GetDataFromSensors()
 		if err != nil {
 			return 0, err
