@@ -15,6 +15,7 @@ func getRoutes() http.Handler {
 	mux.Group(func(r chi.Router) {
 		r.Post("/auth/login", userHttpHandler.Login(authSettings))
 		r.Post("/auth/register", userHttpHandler.Register(authSettings))
+		r.Post("/auth/refresh", userHttpHandler.RefreshToken(authSettings))
 		r.Delete("/auth/logout", userHttpHandler.Logout(authSettings))
 		r.Get("/auth/roles", userHttpHandler.GetRolesForRegistration)
 		r.Get("/companies", companyHttpHandler.GetAllCompanies)

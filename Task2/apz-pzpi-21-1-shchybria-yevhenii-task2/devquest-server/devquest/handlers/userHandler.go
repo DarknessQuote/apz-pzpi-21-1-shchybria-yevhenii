@@ -5,9 +5,11 @@ import (
 	"devquest-server/devquest/infrastructure"
 	"devquest-server/devquest/usecases"
 	"devquest-server/devquest/utils"
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
@@ -106,6 +108,52 @@ func (u *UserHttpHandler) Login(auth *infrastructure.Auth) http.HandlerFunc {
 		}
 
 		utils.WriteJSON(w, http.StatusAccepted, res)
+	}
+}
+
+func (u *UserHttpHandler) RefreshToken(auth *infrastructure.Auth) http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request) {
+		for _, cookie := range r.Cookies() {
+			if cookie.Name == auth.CookieName {
+				claims := &infrastructure.Claims{}
+				refreshToken := cookie.Value
+
+				_, err := jwt.ParseWithClaims(refreshToken, claims, func(token *jwt.Token) (any, error) {
+					return []byte(auth.Secret), nil
+				})
+				if err != nil {
+					utils.ErrorJSON(w, errors.New("unauthorized"), http.StatusUnauthorized)
+					return
+				}
+
+				userID, err := uuid.Parse(claims.Subject)
+				if err != nil {
+					utils.ErrorJSON(w, errors.New("unknown user"), http.StatusUnauthorized)
+					return
+				}
+
+				jwtUser, err := u.userUsecase.GetJwtUserByID(userID)
+				if err != nil {
+					utils.ErrorJSON(w, errors.New("unknown user"), http.StatusUnauthorized)
+					return
+				}
+
+				u := infrastructure.JWTUser{
+					ID: jwtUser.ID,
+					Username: jwtUser.Username,
+					RoleTitle: jwtUser.RoleTitle,
+				}
+
+				tokenPairs, err := auth.GenerateTokenPairs(&u)
+				if err != nil {
+					utils.ErrorJSON(w, errors.New("error generating tokens"), http.StatusUnauthorized)
+					return
+				}
+
+				http.SetCookie(w, auth.GetRefreshCookie(tokenPairs.RefreshToken))
+				utils.WriteJSON(w, http.StatusAccepted, tokenPairs)
+			}
+		}
 	}
 }
 

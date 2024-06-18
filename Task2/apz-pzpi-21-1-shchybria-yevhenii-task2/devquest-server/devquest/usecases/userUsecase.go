@@ -97,6 +97,26 @@ func (u *UserUsecase) LoginUser(userLoginInfo models.LoginUserDTO) (*models.JwtU
 	}, nil
 }
 
+func (u *UserUsecase) GetJwtUserByID(userID uuid.UUID) (*models.JwtUserDTO, error) {
+	user, err := u.userRepo.GetUserByID(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	role, err := u.userRepo.GetRoleByID(user.RoleID)
+	if err != nil {
+		return nil, err
+	}
+
+	jwtUser := &models.JwtUserDTO{
+		ID: user.ID,
+		Username: user.Username,
+		RoleTitle: role.Title,
+	}
+
+	return jwtUser, err
+}
+
 func (u *UserUsecase) GetDevelopersForManager(managerID uuid.UUID) ([]*entities.User, error) {
 	manager, err := u.userRepo.GetUserByID(managerID)
 	if err != nil {

@@ -17,6 +17,6 @@ auth:
     audience: devquest
     tokenexpiry: 15
     refreshexpiry: 24
-    cookiedomain: .localhost
+    cookiedomain: 127.0.0.1
     cookiepath: /
-    cookiename: __Host-refresh_token
+    cookiename: refresh_token
