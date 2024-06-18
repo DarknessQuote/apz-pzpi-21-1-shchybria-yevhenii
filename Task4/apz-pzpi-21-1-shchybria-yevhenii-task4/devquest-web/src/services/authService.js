@@ -16,6 +16,7 @@ export const register = async (registerData) => {
 			method: "POST",
 			body: JSON.stringify(reqBody),
 			headers: headers,
+			credentials: "include",
 		};
 
 		const responseJSON = await fetch(
@@ -48,6 +49,7 @@ export const login = async (loginData) => {
 			method: "POST",
 			body: JSON.stringify(reqBody),
 			headers: headers,
+			credentials: "include",
 		};
 
 		const responseJSON = await fetch(
@@ -60,9 +62,32 @@ export const login = async (loginData) => {
 			throw new Error(response.message);
 		}
 
-		return response.data;
+		return response;
 	} catch (err) {
-		console.error(err);
+		throw err;
+	}
+};
+
+export const refresh = async () => {
+	try {
+		const reqOptions = {
+			method: "POST",
+			credentials: "include",
+		};
+
+		const responseJSON = await fetch(
+			"http://127.0.0.1:8080/auth/refresh",
+			reqOptions
+		);
+		const response = await responseJSON.json();
+
+		if (response.error) {
+			throw new Error(response.message);
+		}
+
+		return response;
+	} catch (err) {
+		throw err;
 	}
 };
 
@@ -75,6 +100,6 @@ export const logout = async () => {
 
 		await fetch("http://127.0.0.1:8080/auth/logout", reqOptions);
 	} catch (err) {
-		console.log(err);
+		throw err;
 	}
 };
