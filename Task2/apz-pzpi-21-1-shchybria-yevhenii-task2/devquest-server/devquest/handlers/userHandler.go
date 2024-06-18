@@ -96,16 +96,11 @@ func (u *UserHttpHandler) Login(auth *infrastructure.Auth) http.HandlerFunc {
 		refreshCookie := auth.GetRefreshCookie(tokens.RefreshToken)
 		http.SetCookie(w, refreshCookie)
 
-		resData := struct {
+		res := struct {
 			Tokens infrastructure.TokenPairs `json:"tokens"`
 			UserID uuid.UUID `json:"user_id"`
 			RoleTitle string `json:"role"`
 		} {Tokens: tokens, UserID: jwtUser.ID, RoleTitle: jwtUser.RoleTitle}
-
-		res := utils.JSONResponse{
-			Error: false,
-			Data: resData,
-		}
 
 		utils.WriteJSON(w, http.StatusAccepted, res)
 	}
@@ -144,14 +139,22 @@ func (u *UserHttpHandler) RefreshToken(auth *infrastructure.Auth) http.HandlerFu
 					RoleTitle: jwtUser.RoleTitle,
 				}
 
-				tokenPairs, err := auth.GenerateTokenPairs(&u)
+				tokens, err := auth.GenerateTokenPairs(&u)
 				if err != nil {
 					utils.ErrorJSON(w, errors.New("error generating tokens"), http.StatusUnauthorized)
 					return
 				}
 
-				http.SetCookie(w, auth.GetRefreshCookie(tokenPairs.RefreshToken))
-				utils.WriteJSON(w, http.StatusAccepted, tokenPairs)
+				refreshCookie := auth.GetRefreshCookie(tokens.RefreshToken)
+				http.SetCookie(w, refreshCookie)
+
+				res := struct {
+					Tokens infrastructure.TokenPairs `json:"tokens"`
+					UserID uuid.UUID `json:"user_id"`
+					RoleTitle string `json:"role"`
+				} {Tokens: tokens, UserID: jwtUser.ID, RoleTitle: jwtUser.RoleTitle}
+
+				utils.WriteJSON(w, http.StatusAccepted, res)
 			}
 		}
 	}
