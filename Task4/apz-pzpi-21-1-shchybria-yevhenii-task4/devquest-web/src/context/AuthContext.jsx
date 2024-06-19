@@ -8,12 +8,17 @@ export const useAuthContext = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-	const [auth, setAuth] = useState({});
+	const [auth, setAuth] = useState(null);
 
 	useEffect(() => {
 		const refreshAuthData = async () => {
 			try {
 				const refreshData = await refresh();
+
+				if (refreshData == null) {
+					return;
+				}
+
 				setAuth({
 					token: refreshData.tokens.access_token,
 					userID: refreshData.user_id,
