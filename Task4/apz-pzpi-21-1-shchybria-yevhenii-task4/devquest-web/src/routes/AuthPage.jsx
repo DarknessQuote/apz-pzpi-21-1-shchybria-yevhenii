@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Container, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import LoginForm from "../components/LoginForm.jsx";
 import RegisterForm from "../components/RegisterForm.jsx";
 import { login, register } from "../services/authService.js";
@@ -34,17 +34,9 @@ const AuthPage = () => {
 	};
 
 	if (authMode === "login") {
-		return (
-			<Container>
-				<LoginForm authenticateUser={authenticateUser} />
-			</Container>
-		);
+		return <LoginForm authenticateUser={authenticateUser} />;
 	} else if (authMode === "register") {
-		return (
-			<Container>
-				<RegisterForm authenticateUser={authenticateUser} />
-			</Container>
-		);
+		return <RegisterForm authenticateUser={authenticateUser} />;
 	} else {
 		return <Typography>Unsupported auth mode</Typography>;
 	}
