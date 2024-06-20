@@ -42,8 +42,8 @@ const RegisterForm = ({ authenticateUser }) => {
 			firstName: firstNameRef.current.value,
 			lastName: lastNameRef.current.value,
 			password: passwordRef.current.value,
-			role: roleRef.current.value,
-			company: companyRef.current.value,
+			roleID: roleRef.current.value,
+			companyID: companyRef.current.value,
 		};
 
 		await authenticateUser(registerData);
