@@ -4,6 +4,7 @@ import LoginForm from "../components/LoginForm.jsx";
 import RegisterForm from "../components/RegisterForm.jsx";
 import { login, register } from "../services/authService.js";
 import { useAuthContext } from "../context/AuthContext.jsx";
+import { useTranslation } from "react-i18next";
 
 const AuthPage = () => {
 	// eslint-disable-next-line no-unused-vars
@@ -11,6 +12,8 @@ const AuthPage = () => {
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 	const authMode = searchParams.get("mode");
+
+	const { t } = useTranslation();
 
 	const authenticateUser = async (authData) => {
 		let authResponse;
@@ -38,7 +41,7 @@ const AuthPage = () => {
 	} else if (authMode === "register") {
 		return <RegisterForm authenticateUser={authenticateUser} />;
 	} else {
-		return <Typography>Unsupported auth mode</Typography>;
+		return <Typography>{t("invalidAuth")}</Typography>;
 	}
 };
 

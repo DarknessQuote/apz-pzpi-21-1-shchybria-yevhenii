@@ -10,6 +10,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { getRoles } from "../services/authService.js";
 import { getCompanies } from "../services/companyService.js";
+import { useTranslation } from "react-i18next";
 
 const RegisterForm = ({ authenticateUser }) => {
 	const [roles, setRoles] = useState([]);
@@ -21,6 +22,8 @@ const RegisterForm = ({ authenticateUser }) => {
 	const passwordRef = useRef();
 	const roleRef = useRef();
 	const companyRef = useRef();
+
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		const getDataForRegister = async () => {
@@ -55,7 +58,7 @@ const RegisterForm = ({ authenticateUser }) => {
 				<TextField
 					required
 					name="username"
-					label="Username"
+					label={t("username")}
 					variant="outlined"
 					inputRef={usernameRef}
 					InputLabelProps={{ shrink: true }}
@@ -63,7 +66,7 @@ const RegisterForm = ({ authenticateUser }) => {
 				<TextField
 					required
 					name="firstName"
-					label="First Name"
+					label={t("firstName")}
 					variant="outlined"
 					inputRef={firstNameRef}
 					InputLabelProps={{ shrink: true }}
@@ -71,7 +74,7 @@ const RegisterForm = ({ authenticateUser }) => {
 				<TextField
 					required
 					name="lastName"
-					label="Last Name"
+					label={t("lastName")}
 					variant="outlined"
 					inputRef={lastNameRef}
 					InputLabelProps={{ shrink: true }}
@@ -80,20 +83,20 @@ const RegisterForm = ({ authenticateUser }) => {
 					required
 					name="password"
 					type="password"
-					label="Password"
+					label={t("password")}
 					variant="outlined"
 					inputRef={passwordRef}
 					InputLabelProps={{ shrink: true }}
 				/>
 				<FormControl>
-					<InputLabel>Role</InputLabel>
+					<InputLabel>{t("role")}</InputLabel>
 					<Select
 						required
 						title="role"
-						label="Role"
+						label={t("role")}
 						inputRef={roleRef}>
 						<MenuItem selected value="">
-							Select role
+							{t("roleSelect")}
 						</MenuItem>
 						{roles.map((role) => {
 							return (
@@ -105,14 +108,14 @@ const RegisterForm = ({ authenticateUser }) => {
 					</Select>
 				</FormControl>
 				<FormControl>
-					<InputLabel>Company</InputLabel>
+					<InputLabel>{t("company")}</InputLabel>
 					<Select
 						required
 						title="company"
-						label="Company"
+						label={t("company")}
 						inputRef={companyRef}>
 						<MenuItem selected value="">
-							Select company
+							{t("companySelect")}
 						</MenuItem>
 						{companies.map((company) => {
 							return (
@@ -123,7 +126,7 @@ const RegisterForm = ({ authenticateUser }) => {
 						})}
 					</Select>
 				</FormControl>
-				<Button type="submit">Register</Button>
+				<Button type="submit">{t("register")}</Button>
 			</Box>
 		</form>
 	);

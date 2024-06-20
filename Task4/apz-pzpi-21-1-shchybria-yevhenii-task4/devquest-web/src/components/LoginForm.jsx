@@ -1,9 +1,12 @@
 import { Box, Button, TextField } from "@mui/material";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 const LoginForm = ({ authenticateUser }) => {
 	const usernameRef = useRef();
 	const passwordRef = useRef();
+
+	const { t } = useTranslation();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -22,7 +25,7 @@ const LoginForm = ({ authenticateUser }) => {
 				<TextField
 					required
 					name="username"
-					label="Username"
+					label={t("username")}
 					variant="outlined"
 					inputRef={usernameRef}
 					InputLabelProps={{ shrink: true }}
@@ -31,12 +34,12 @@ const LoginForm = ({ authenticateUser }) => {
 					required
 					name="password"
 					type="password"
-					label="Password"
+					label={t("password")}
 					variant="outlined"
 					inputRef={passwordRef}
 					InputLabelProps={{ shrink: true }}
 				/>
-				<Button type="submit">Login</Button>
+				<Button type="submit">{t("login")}</Button>
 			</Box>
 		</form>
 	);

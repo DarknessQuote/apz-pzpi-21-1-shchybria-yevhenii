@@ -9,24 +9,31 @@ import {
 import { useAuthContext } from "../context/AuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "../services/authService";
+import { useTranslation } from "react-i18next";
+import ChangeLanguageMenu from "./ChangeLanguageMenu";
 
 const Header = () => {
 	const [auth, setAuth] = useAuthContext();
 	const navigate = useNavigate();
 
+	const { t } = useTranslation();
+
 	return (
 		<AppBar position="sticky" className="mb-5">
-			<Toolbar className="flex items-center">
+			<Toolbar className="flex items-center gap-5">
 				<Box className="grow">
-					<Typography>DevQuest</Typography>
+					<NavLink to="/" className="no-underline text-inherit">
+						<Typography>DevQuest</Typography>
+					</NavLink>
 				</Box>
+				<ChangeLanguageMenu />
 				{auth === null ? (
 					<ButtonGroup variant="contained" disableElevation>
 						<NavLink to="/auth?mode=login">
-							<Button>Login</Button>
+							<Button>{t("login")}</Button>
 						</NavLink>
 						<NavLink to="/auth?mode=register">
-							<Button>Register</Button>
+							<Button>{t("register")}</Button>
 						</NavLink>
 					</ButtonGroup>
 				) : (
@@ -37,7 +44,7 @@ const Header = () => {
 							setAuth(null);
 							navigate("/");
 						}}>
-						Log out
+						{t("logout")}
 					</Button>
 				)}
 			</Toolbar>

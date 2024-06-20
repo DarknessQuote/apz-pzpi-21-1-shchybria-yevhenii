@@ -1,0 +1,15 @@
+{
+	"login": "Log in",
+	"register": "Register",
+	"logout": "Log out",
+	"invalidAuth": "Invalid auth mode",
+	"noAuth": "Not authenticated",
+	"username": "Username",
+	"firstName": "First Name",
+	"lastName": "Last Name",
+	"password": "Password",
+	"role": "Role",
+	"company": "Company",
+	"roleSelect": "Select a role",
+	"companySelect": "Select a company"
+}
