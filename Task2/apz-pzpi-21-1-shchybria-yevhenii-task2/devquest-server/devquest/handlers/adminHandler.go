@@ -32,5 +32,6 @@ func (a *AdminHttpHandler) GetDatabaseBackup(w http.ResponseWriter, r *http.Requ
 	}
 
 	backupFilePath := fmt.Sprintf("%s\\backups\\%s", currentDir, dumpResult.File)
+	w.Header().Add("Content-Type", "application/x-tar")
 	http.ServeFile(w, r, backupFilePath)
 }
