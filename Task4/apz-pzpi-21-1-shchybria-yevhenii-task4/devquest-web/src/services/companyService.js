@@ -10,7 +10,7 @@ export const getCompanies = async () => {
 		};
 
 		const responseJSON = await fetch(
-			"http://127.0.0.1:8080/companies",
+			`${process.env.REACT_APP_BACKEND_URL}/companies`,
 			reqOptions
 		);
 		const response = await responseJSON.json();
@@ -38,7 +38,7 @@ export const getCompany = async (companyID, token) => {
 		};
 
 		const responseJSON = await fetch(
-			`http://127.0.0.1:8080/companies/${companyID}`,
+			`${process.env.REACT_APP_BACKEND_URL}/companies/${companyID}`,
 			reqOptions
 		);
 		const response = await responseJSON.json();
@@ -73,7 +73,7 @@ export const addCompany = async (addCompanyData, token) => {
 		};
 
 		const responseJSON = await fetch(
-			"http://127.0.0.1:8080/companies",
+			`${process.env.REACT_APP_BACKEND_URL}/companies`,
 			reqOptions
 		);
 		const response = await responseJSON.json();
@@ -108,7 +108,7 @@ export const updateCompany = async (companyID, updateCompanyData, token) => {
 		};
 
 		const responseJSON = await fetch(
-			`http://127.0.0.1:8080/companies/${companyID}`,
+			`${process.env.REACT_APP_BACKEND_URL}/companies/${companyID}`,
 			reqOptions
 		);
 		const response = await responseJSON.json();
@@ -135,7 +135,7 @@ export const deleteCompany = async (companyID, token) => {
 		};
 
 		const responseJSON = await fetch(
-			`http://127.0.0.1:8080/companies/${companyID}`,
+			`${process.env.REACT_APP_BACKEND_URL}/companies/${companyID}`,
 			reqOptions
 		);
 		const response = await responseJSON.json();

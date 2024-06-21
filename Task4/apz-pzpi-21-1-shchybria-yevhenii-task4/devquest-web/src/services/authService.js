@@ -20,7 +20,7 @@ export const register = async (registerData) => {
 		};
 
 		const responseJSON = await fetch(
-			"http://localhost:8080/auth/register",
+			`${process.env.REACT_APP_BACKEND_URL}/auth/register`,
 			reqOptions
 		);
 		const response = await responseJSON.json();
@@ -53,7 +53,7 @@ export const login = async (loginData) => {
 		};
 
 		const responseJSON = await fetch(
-			"http://127.0.0.1:8080/auth/login",
+			`${process.env.REACT_APP_BACKEND_URL}/auth/login`,
 			reqOptions
 		);
 		const response = await responseJSON.json();
@@ -76,7 +76,7 @@ export const refresh = async () => {
 		};
 
 		const responseJSON = await fetch(
-			"http://127.0.0.1:8080/auth/refresh",
+			`${process.env.REACT_APP_BACKEND_URL}/auth/refresh`,
 			reqOptions
 		);
 		const response = await responseJSON.json();
@@ -98,7 +98,10 @@ export const logout = async () => {
 			credentials: "include",
 		};
 
-		await fetch("http://127.0.0.1:8080/auth/logout", reqOptions);
+		await fetch(
+			`${process.env.REACT_APP_BACKEND_URL}/auth/logout`,
+			reqOptions
+		);
 	} catch (err) {
 		throw err;
 	}
@@ -116,7 +119,7 @@ export const getRoles = async () => {
 		};
 
 		const responseJSON = await fetch(
-			"http://127.0.0.1:8080/auth/roles",
+			`${process.env.REACT_APP_BACKEND_URL}/auth/roles`,
 			reqOptions
 		);
 		const response = await responseJSON.json();
