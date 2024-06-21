@@ -150,3 +150,21 @@ func (u *UserUsecase) GetRolesForRegistration() ([]*entities.Role, error) {
 
 	return roles, nil
 }
+
+func (u *UserUsecase) GetUserByID(userID uuid.UUID) (*entities.User, error) {
+	user, err := u.userRepo.GetUserByID(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, err
+}
+
+func (u *UserUsecase) GetRoleByID(roleID uuid.UUID) (*entities.Role, error) {
+	role, err := u.userRepo.GetRoleByID(roleID)
+	if err != nil {
+		return nil, err
+	}
+
+	return role, err
+}

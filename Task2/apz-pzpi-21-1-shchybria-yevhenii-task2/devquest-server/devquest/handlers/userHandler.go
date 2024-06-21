@@ -192,3 +192,35 @@ func (u *UserHttpHandler) GetRolesForRegistration(w http.ResponseWriter, r *http
 
 	_ = utils.WriteJSON(w, http.StatusAccepted, roles)
 }
+
+func (u *UserHttpHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
+	userID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	user, err := u.userUsecase.GetUserByID(userID)
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	_ = utils.WriteJSON(w, http.StatusAccepted, user)
+}
+
+func (u *UserHttpHandler) GetRoleByID(w http.ResponseWriter, r *http.Request) {
+	roleID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	role, err := u.userUsecase.GetRoleByID(roleID)
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	_ = utils.WriteJSON(w, http.StatusAccepted, role)
+}

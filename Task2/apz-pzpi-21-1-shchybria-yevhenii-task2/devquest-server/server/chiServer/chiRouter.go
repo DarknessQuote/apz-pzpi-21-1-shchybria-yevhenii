@@ -18,7 +18,11 @@ func getRoutes() http.Handler {
 		r.Post("/auth/refresh", userHttpHandler.RefreshToken(authSettings))
 		r.Delete("/auth/logout", userHttpHandler.Logout(authSettings))
 		r.Get("/auth/roles", userHttpHandler.GetRolesForRegistration)
+		r.Get("/user/{id}", userHttpHandler.GetUserByID)
+		r.Get("/role/{id}", userHttpHandler.GetRoleByID)
+
 		r.Get("/companies", companyHttpHandler.GetAllCompanies)
+		r.Get("/companies/{id}", companyHttpHandler.GetCompanyByID)
 
 		r.Put("/measure/add-owner", measurementHttpHander.AddOwnerToDevice)
 		r.Post("/measure", measurementHttpHander.AddMeasurementResult)
@@ -28,7 +32,6 @@ func getRoutes() http.Handler {
 	mux.Group(func(r chi.Router) {
 		r.Use(middleware.RolesRequired(*authSettings, "Admin"))
 
-		r.Get("/companies/{id}", companyHttpHandler.GetCompanyByID)
 		r.Post("/companies", companyHttpHandler.AddCompany)
 		r.Put("/companies/{id}", companyHttpHandler.UpdateCompany)
 		r.Delete("/companies/{id}", companyHttpHandler.DeleteCompany)
