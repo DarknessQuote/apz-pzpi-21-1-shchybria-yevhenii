@@ -11,5 +11,6 @@
 	"role": "Role",
 	"company": "Company",
 	"roleSelect": "Select a role",
-	"companySelect": "Select a company"
+	"companySelect": "Select a company",
+	"backup": "Data Backup"
 }

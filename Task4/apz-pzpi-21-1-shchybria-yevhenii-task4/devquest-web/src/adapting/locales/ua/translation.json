@@ -11,5 +11,6 @@
 	"role": "Посада",
 	"company": "Компанія",
 	"roleSelect": "Оберіть посаду",
-	"companySelect": "Оберіть компанію"
+	"companySelect": "Оберіть компанію",
+	"backup": "Експорт даних"
 }

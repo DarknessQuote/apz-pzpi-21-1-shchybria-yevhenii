@@ -11,6 +11,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "../services/authService";
 import { useTranslation } from "react-i18next";
 import ChangeLanguageMenu from "./ChangeLanguageMenu";
+import { dataBackup } from "../services/adminService";
 
 const Header = () => {
 	const [auth, setAuth] = useAuthContext();
@@ -20,11 +21,23 @@ const Header = () => {
 
 	return (
 		<AppBar position="sticky" className="mb-5">
-			<Toolbar className="flex items-center gap-5">
-				<Box className="grow">
+			<Toolbar className="flex items-center gap-10">
+				<Box className="grow flex gap-10">
 					<NavLink to="/" className="no-underline text-inherit">
-						<Typography>DevQuest</Typography>
+						<Typography className="font-bold text-3xl">
+							DevQuest
+						</Typography>
 					</NavLink>
+					{auth !== null && auth.role === "Admin" && (
+						<Button
+							variant="text"
+							className="text-white"
+							onClick={async () => {
+								await dataBackup(auth.token);
+							}}>
+							{t("backup")}
+						</Button>
+					)}
 				</Box>
 				<ChangeLanguageMenu />
 				{auth === null ? (
