@@ -6,7 +6,7 @@ const RootLayout = () => {
 	return (
 		<Box>
 			<Header />
-			<Container maxWidth="lg" className="py-5 flex flex-col gap-10">
+			<Container maxWidth="lg" className="py-5 flex flex-col gap-5">
 				<Outlet />
 			</Container>
 		</Box>
