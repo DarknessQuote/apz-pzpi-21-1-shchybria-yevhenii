@@ -25,11 +25,10 @@ export const getCompanies = async () => {
 	}
 };
 
-export const getCompany = async (companyID, token) => {
+export const getCompany = async (companyID) => {
 	try {
 		const headers = new Headers();
 		headers.append("Content-Type", "application/json");
-		headers.append("Authorization", `Bearer ${token}`);
 
 		const reqOptions = {
 			method: "GET",
