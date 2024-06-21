@@ -26,7 +26,7 @@ export const dataBackup = async (token) => {
 		const fileurl = window.URL.createObjectURL(new Blob([responseBlob]));
 		const link = document.createElement("a");
 		link.href = fileurl;
-		link.setAttribute("download", `data-backup.tar`);
+		link.setAttribute("download", `devquest-data-backup.tar`);
 
 		document.body.appendChild(link);
 		link.click();

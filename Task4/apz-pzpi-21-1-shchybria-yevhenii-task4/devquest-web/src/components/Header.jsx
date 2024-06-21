@@ -29,14 +29,17 @@ const Header = () => {
 						</Typography>
 					</NavLink>
 					{auth !== null && auth.role === "Admin" && (
-						<Button
-							variant="text"
-							className="text-white"
-							onClick={async () => {
-								await dataBackup(auth.token);
-							}}>
-							{t("backup")}
-						</Button>
+						<ButtonGroup variant="contained" disableElevation>
+							<NavLink to="/companies">
+								<Button>{t("companies")}</Button>
+							</NavLink>
+							<Button
+								onClick={async () => {
+									await dataBackup(auth.token);
+								}}>
+								{t("backup")}
+							</Button>
+						</ButtonGroup>
 					)}
 				</Box>
 				<ChangeLanguageMenu />
