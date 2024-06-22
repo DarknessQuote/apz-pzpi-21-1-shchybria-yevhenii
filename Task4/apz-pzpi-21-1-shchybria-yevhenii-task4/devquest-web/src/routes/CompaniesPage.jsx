@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { deleteCompany, getCompanies } from "../services/companyService";
+import {
+	addCompany,
+	deleteCompany,
+	getCompanies,
+	updateCompany,
+} from "../services/companyService";
 import {
 	Box,
 	Button,
@@ -37,6 +42,16 @@ const CompaniesPage = () => {
 
 	const handleDeleteCompany = async (companyID) => {
 		await deleteCompany(companyID, auth.token);
+		setCompanies(await getCompanies());
+	};
+
+	const sendCompanyData = async (companyData) => {
+		if (companyData.id.length > 0) {
+			await updateCompany(companyData.id, companyData, auth.token);
+		} else {
+			await addCompany(companyData, auth.token);
+		}
+
 		setCompanies(await getCompanies());
 	};
 
@@ -93,7 +108,11 @@ const CompaniesPage = () => {
 			</Button>
 			<Dialog open={modalOpen} onClose={handleClose}>
 				<DialogContent>
-					<CompanyForm company={selectedCompany} />
+					<CompanyForm
+						company={selectedCompany}
+						sendCompanyData={sendCompanyData}
+						handleClose={handleClose}
+					/>
 				</DialogContent>
 			</Dialog>
 		</>
