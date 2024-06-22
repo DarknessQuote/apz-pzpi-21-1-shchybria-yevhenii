@@ -11,7 +11,10 @@
 	"role": "Role",
 	"company": "Company",
 	"companies": "Companies",
+	"project": "Project",
+	"projects": "Projects",
 	"name": "Name",
+	"description": "Description",
 	"owner": "Owner",
 	"email": "Email",
 	"save": "Save",
@@ -21,5 +24,6 @@
 	"backup": "Data Backup",
 	"edit": "Edit",
 	"delete": "Delete",
-	"addCompany": "Add a company"
+	"addCompany": "Add a company",
+	"addProject": "Add a project"
 }

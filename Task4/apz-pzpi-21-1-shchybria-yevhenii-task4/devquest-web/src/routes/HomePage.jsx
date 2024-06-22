@@ -73,11 +73,27 @@ const AdminActions = () => {
 };
 
 const ManagerActions = () => {
-	return <Typography>Actions for manager</Typography>;
+	const navigate = useNavigate();
+
+	const { t } = useTranslation();
+
+	return (
+		<Button variant="contained" onClick={() => navigate("/projects")}>
+			{t("projects")}
+		</Button>
+	);
 };
 
 const DeveloperActions = () => {
-	return <Typography>Actions for developer</Typography>;
+	const navigate = useNavigate();
+
+	const { t } = useTranslation();
+
+	return (
+		<Button variant="contained" onClick={() => navigate("/projects")}>
+			{t("projects")}
+		</Button>
+	);
 };
 
 export default HomePage;

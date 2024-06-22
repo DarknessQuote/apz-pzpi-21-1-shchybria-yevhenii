@@ -83,11 +83,27 @@ const AdminActions = () => {
 };
 
 const ManagerActions = () => {
-	return <Typography>Actions for manager</Typography>;
+	const { t } = useTranslation();
+
+	return (
+		<ButtonGroup variant="contained" disableElevation>
+			<NavLink to="/projects">
+				<Button>{t("projects")}</Button>
+			</NavLink>
+		</ButtonGroup>
+	);
 };
 
 const DeveloperActions = () => {
-	return <Typography>Actions for developer</Typography>;
+	const { t } = useTranslation();
+
+	return (
+		<ButtonGroup variant="contained" disableElevation>
+			<NavLink to="/projects">
+				<Button>{t("projects")}</Button>
+			</NavLink>
+		</ButtonGroup>
+	);
 };
 
 export default Header;

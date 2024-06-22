@@ -3,6 +3,7 @@ import AuthPage from "./routes/AuthPage";
 import HomePage from "./routes/HomePage";
 import RootLayout from "./routes/RootLayout";
 import CompaniesPage from "./routes/CompaniesPage";
+import ProjectsPage from "./routes/ProjectsPage";
 
 const App = () => {
 	const router = createBrowserRouter([
@@ -20,8 +21,12 @@ const App = () => {
 				},
 				{
 					path: "/companies",
-					element: <CompaniesPage />
-				}
+					element: <CompaniesPage />,
+				},
+				{
+					path: "/projects",
+					element: <ProjectsPage />,
+				},
 			],
 		},
 	]);
