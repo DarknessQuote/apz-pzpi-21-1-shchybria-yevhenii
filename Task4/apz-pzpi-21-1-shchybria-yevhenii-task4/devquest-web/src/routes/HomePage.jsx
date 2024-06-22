@@ -11,8 +11,6 @@ const HomePage = () => {
 	const [auth] = useAuthContext();
 	const [user, setUser] = useState(null);
 
-	const navigate = useNavigate();
-
 	const { t } = useTranslation();
 
 	useEffect(() => {
@@ -42,26 +40,44 @@ const HomePage = () => {
 					<Typography variant="h5" align="center" className="mb-3">
 						{t("availableActions")}
 					</Typography>
-					{auth.role === "Admin" && (
-						<>
-							<Button
-								variant="contained"
-								onClick={() => navigate("/companies")}>
-								{t("companies")}
-							</Button>
-							<Button
-								variant="contained"
-								onClick={async () => {
-									await dataBackup(auth.token);
-								}}>
-								{t("backup")}
-							</Button>
-						</>
-					)}
+					{auth.role === "Admin" && <AdminActions />}
+					{auth.role === "Manager" && <ManagerActions />}
+					{auth.role === "Developer" && <DeveloperActions />}
 				</Box>
 			</Box>
 		);
 	}
+};
+
+const AdminActions = () => {
+	const [auth] = useAuthContext();
+
+	const navigate = useNavigate();
+
+	const { t } = useTranslation();
+
+	return (
+		<>
+			<Button variant="contained" onClick={() => navigate("/companies")}>
+				{t("companies")}
+			</Button>
+			<Button
+				variant="contained"
+				onClick={async () => {
+					await dataBackup(auth.token);
+				}}>
+				{t("backup")}
+			</Button>
+		</>
+	);
+};
+
+const ManagerActions = () => {
+	return <Typography>Actions for manager</Typography>;
+};
+
+const DeveloperActions = () => {
+	return <Typography>Actions for developer</Typography>;
 };
 
 export default HomePage;

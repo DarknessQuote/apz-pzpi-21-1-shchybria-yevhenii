@@ -28,18 +28,12 @@ const Header = () => {
 							DevQuest
 						</Typography>
 					</NavLink>
-					{auth !== null && auth.role === "Admin" && (
-						<ButtonGroup variant="contained" disableElevation>
-							<NavLink to="/companies">
-								<Button>{t("companies")}</Button>
-							</NavLink>
-							<Button
-								onClick={async () => {
-									await dataBackup(auth.token);
-								}}>
-								{t("backup")}
-							</Button>
-						</ButtonGroup>
+					{auth !== null && auth.role === "Admin" && <AdminActions />}
+					{auth !== null && auth.role === "Manager" && (
+						<ManagerActions />
+					)}
+					{auth !== null && auth.role === "Developer" && (
+						<DeveloperActions />
 					)}
 				</Box>
 				<ChangeLanguageMenu />
@@ -66,6 +60,34 @@ const Header = () => {
 			</Toolbar>
 		</AppBar>
 	);
+};
+
+const AdminActions = () => {
+	const [auth] = useAuthContext();
+
+	const { t } = useTranslation();
+
+	return (
+		<ButtonGroup variant="contained" disableElevation>
+			<NavLink to="/companies">
+				<Button>{t("companies")}</Button>
+			</NavLink>
+			<Button
+				onClick={async () => {
+					await dataBackup(auth.token);
+				}}>
+				{t("backup")}
+			</Button>
+		</ButtonGroup>
+	);
+};
+
+const ManagerActions = () => {
+	return <Typography>Actions for manager</Typography>;
+};
+
+const DeveloperActions = () => {
+	return <Typography>Actions for developer</Typography>;
 };
 
 export default Header;
