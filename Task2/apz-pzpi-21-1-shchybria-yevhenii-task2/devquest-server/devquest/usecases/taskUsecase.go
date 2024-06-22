@@ -180,16 +180,29 @@ func (t *TaskUsecase) CompleteTask(taskID uuid.UUID, developerID uuid.UUID) erro
 	return nil
 }
 
-func (t *TaskUsecase) CreateNewTaskCategory(newCategory models.CreateTaskCategoryDTO) error {
-	addCategory := entities.TaskCategory{
-		ID: uuid.New(),
-		Name: newCategory.Name,
-	}
-
-	err := t.taskRepo.AddTaskCategory(addCategory)
+func (t *TaskUsecase) GetTaskCategories() ([]*entities.TaskCategory, error) {
+	categories, err := t.taskRepo.GetTaskCategories()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return categories, nil
+}
+
+func (t *TaskUsecase) GetTaskCategoryByID(categoryID uuid.UUID) (*entities.TaskCategory, error) {
+	category, err := t.taskRepo.GetTaskCategoryByID(categoryID)
+	if err != nil {
+		return nil, err
+	}
+
+	return category, nil
+}
+
+func (t *TaskUsecase) GetTaskStatusByID(statusID uuid.UUID) (*entities.TaskStatus, error) {
+	status, err := t.taskRepo.GetTaskStatusByID(statusID)
+	if err != nil {
+		return nil, err
+	}
+
+	return status, nil
 }

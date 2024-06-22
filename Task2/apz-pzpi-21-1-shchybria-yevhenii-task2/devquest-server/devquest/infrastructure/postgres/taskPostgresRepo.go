@@ -168,22 +168,34 @@ func (t *TaskPostgresRepo) CompleteTask(taskID uuid.UUID, completedTask models.C
 	return nil
 }
 
-func (t *TaskPostgresRepo) AddTaskCategory(newCategory entities.TaskCategory) error {
+func (t *TaskPostgresRepo) GetTaskCategories() ([]*entities.TaskCategory, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), t.db.GetDBTimeout())
 	defer cancel()
 
-	execute := `
-		INSERT INTO task_categories
-		(id, name)
-		VALUES ($1, $2)
+	query := `
+		SELECT id, name
+		FROM task_categories
 	`
 
-	_, err := t.db.GetDB().ExecContext(ctx, execute, newCategory.ID, newCategory.Name)
+	rows, err := t.db.GetDB().QueryContext(ctx, query)
 	if err != nil {
-			return err
+		return nil, err
+	}
+	defer rows.Close()
+
+	var categories []*entities.TaskCategory
+	for rows.Next() {
+		var category entities.TaskCategory
+
+		err := rows.Scan(&category.ID, &category.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		categories = append(categories, &category)
 	}
 
-	return nil
+	return categories, nil
 }
 
 func (t *TaskPostgresRepo) GetTaskCategoryByID(categoryID uuid.UUID) (*entities.TaskCategory, error) {
@@ -208,6 +220,30 @@ func (t *TaskPostgresRepo) GetTaskCategoryByID(categoryID uuid.UUID) (*entities.
 	}
 
 	return &taskCategory, nil
+}
+
+func (t *TaskPostgresRepo) GetTaskStatusByID(statusID uuid.UUID) (*entities.TaskStatus, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), t.db.GetDBTimeout())
+	defer cancel()
+
+	query := `
+		SELECT id, name
+		FROM task_statuses
+		WHERE id = $1
+	`
+
+	row := t.db.GetDB().QueryRowContext(ctx, query, statusID)
+
+	var taskStatus entities.TaskStatus
+	err := row.Scan(&taskStatus.ID, &taskStatus.Name)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+			return nil, err
+	}
+
+	return &taskStatus, nil
 }
 
 func (t *TaskPostgresRepo) GetTaskStatusByName(statusName string) (*entities.TaskStatus, error) {

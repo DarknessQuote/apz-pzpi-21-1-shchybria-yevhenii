@@ -182,24 +182,44 @@ func (t *TaskHttpHandler) CompleteTask(w http.ResponseWriter, r *http.Request) {
 	_ = utils.WriteJSON(w, http.StatusAccepted, res)
 }
 
-func (t *TaskHttpHandler) CreateNewTaskCategory(w http.ResponseWriter, r *http.Request) {
-	var newTaskCategory models.CreateTaskCategoryDTO
-	err := utils.ReadJSON(w, r, &newTaskCategory)
+func (t *TaskHttpHandler) GetTaskCategories(w http.ResponseWriter, r *http.Request) {
+	categories, err := t.taskUsecase.GetTaskCategories()
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
 	}
 
-	err = t.taskUsecase.CreateNewTaskCategory(newTaskCategory)
+	_ = utils.WriteJSON(w, http.StatusAccepted, categories)
+}
+
+func (t *TaskHttpHandler) GetTaskCategoryByID(w http.ResponseWriter, r *http.Request) {
+	categoryID, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return
 	}
 
-	res := utils.JSONResponse{
-		Error: false,
-		Message: "task category successfully created",
+	category, err := t.taskUsecase.GetTaskCategoryByID(categoryID)
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
 	}
 
-	_ = utils.WriteJSON(w, http.StatusAccepted, res)
+	_ = utils.WriteJSON(w, http.StatusAccepted, category)
+}
+
+func (t *TaskHttpHandler) GetTaskStatusByID(w http.ResponseWriter, r *http.Request) {
+	statusID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	status, err := t.taskUsecase.GetTaskCategoryByID(statusID)
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	_ = utils.WriteJSON(w, http.StatusAccepted, status)
 }

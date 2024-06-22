@@ -17,7 +17,8 @@ type TaskRepo interface {
 	AcceptTask(taskID uuid.UUID, acceptedTask models.AcceptTaskDTO) error
 	CompleteTask(taskID uuid.UUID, completedTask models.CompleteTaskDTO) error
 
-	AddTaskCategory(newCategory entities.TaskCategory) error
+	GetTaskCategories() ([]*entities.TaskCategory, error)
 	GetTaskCategoryByID(categoryID uuid.UUID) (*entities.TaskCategory, error)
+	GetTaskStatusByID(statusID uuid.UUID) (*entities.TaskStatus, error)
 	GetTaskStatusByName(statusName string) (*entities.TaskStatus, error)
 }

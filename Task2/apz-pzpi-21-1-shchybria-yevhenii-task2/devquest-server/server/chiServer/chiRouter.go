@@ -42,7 +42,11 @@ func getRoutes() http.Handler {
 		r.Use(middleware.RolesRequired(*authSettings, "Manager,Developer"))
 
 		r.Get("/projects/developers/{project_id}", projectHttpHandler.GetProjectDevelopers)
+
 		r.Get("/tasks/{project_id}", taskHttpHandler.GetProjectTasks)
+		r.Get("/tasks/categories/{id}", taskHttpHandler.GetTaskCategoryByID)
+		r.Get("/tasks/status/{id}", taskHttpHandler.GetTaskStatusByID)
+
 		r.Get("/achievements/project/{project_id}", achievementHttpHandler.GetProjectAchievements)
 		r.Get("/achievements/developer/{developer_id}", achievementHttpHandler.GetDeveloperAchievements)
 	})
@@ -62,7 +66,7 @@ func getRoutes() http.Handler {
 		r.Post("/tasks/{project_id}", taskHttpHandler.CreateNewTask)
 		r.Put("/tasks/{id}", taskHttpHandler.UpdateTask)
 		r.Delete("/tasks/{id}", taskHttpHandler.DeleteTask)
-		r.Post("/tasks/category/", taskHttpHandler.CreateNewTaskCategory)
+		r.Get("/tasks/categories", taskHttpHandler.GetTaskCategories)
 
 		r.Post("/achievements/{project_id}", achievementHttpHandler.AddAchievementToProject)
 		r.Put("/achievements/{id}", achievementHttpHandler.UpdateAchievement)
