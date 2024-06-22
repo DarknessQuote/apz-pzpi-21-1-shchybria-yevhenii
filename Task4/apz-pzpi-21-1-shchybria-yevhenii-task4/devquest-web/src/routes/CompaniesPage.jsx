@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { deleteCompany, getCompanies } from "../services/companyService";
 import {
+	Box,
 	Button,
 	ButtonGroup,
+	Dialog,
+	DialogContent,
 	Divider,
 	List,
 	ListItem,
@@ -12,9 +15,12 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../context/AuthContext";
+import CompanyForm from "../components/CompanyForm";
 
 const CompaniesPage = () => {
 	const [companies, setCompanies] = useState([]);
+	const [selectedCompany, setSelectedCompany] = useState(null);
+	const [modalOpen, setModalOpen] = useState(false);
 
 	const [auth] = useAuthContext();
 
@@ -34,16 +40,17 @@ const CompaniesPage = () => {
 		setCompanies(await getCompanies());
 	};
 
+	const handleOpen = () => setModalOpen(true);
+	const handleClose = () => setModalOpen(false);
+
 	return (
 		<>
 			<Paper>
 				<List>
 					{companies.map((company, i) => {
 						return (
-							<>
-								<ListItem
-									className="flex justify-start"
-									key={company.id}>
+							<Box key={company.id}>
+								<ListItem className="flex justify-start">
 									<ListItemText
 										primary={company.name}
 										secondary={company.owner}
@@ -54,7 +61,11 @@ const CompaniesPage = () => {
 										className="grow"
 									/>
 									<ButtonGroup variant="contained">
-										<ListItemButton>
+										<ListItemButton
+											onClick={() => {
+												setSelectedCompany(company);
+												handleOpen();
+											}}>
 											{t("edit")}
 										</ListItemButton>
 										<ListItemButton
@@ -66,14 +77,25 @@ const CompaniesPage = () => {
 									</ButtonGroup>
 								</ListItem>
 								{i < companies.length - 1 && <Divider />}
-							</>
+							</Box>
 						);
 					})}
 				</List>
 			</Paper>
-			<Button variant="contained" className="py-3">
+			<Button
+				variant="contained"
+				className="py-3"
+				onClick={() => {
+					setSelectedCompany(null);
+					handleOpen();
+				}}>
 				{t("addCompany")}
 			</Button>
+			<Dialog open={modalOpen} onClose={handleClose}>
+				<DialogContent>
+					<CompanyForm company={selectedCompany} />
+				</DialogContent>
+			</Dialog>
 		</>
 	);
 };
