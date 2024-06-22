@@ -123,10 +123,10 @@ export const updateCompany = async (companyID, updateCompanyData, token) => {
 };
 
 export const deleteCompany = async (companyID, token) => {
-	const headers = new Headers();
-	headers.append("Authorization", `Bearer ${token}`);
-
 	try {
+		const headers = new Headers();
+		headers.append("Authorization", `Bearer ${token}`);
+
 		const reqOptions = {
 			method: "DELETE",
 			credentials: "include",
