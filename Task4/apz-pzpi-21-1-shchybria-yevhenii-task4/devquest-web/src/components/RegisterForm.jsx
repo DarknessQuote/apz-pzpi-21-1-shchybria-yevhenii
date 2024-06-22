@@ -101,7 +101,7 @@ const RegisterForm = ({ authenticateUser }) => {
 						{roles.map((role) => {
 							return (
 								<MenuItem value={role.id} key={role.id}>
-									{role.title}
+									{t(`${role.title}`)}
 								</MenuItem>
 							);
 						})}

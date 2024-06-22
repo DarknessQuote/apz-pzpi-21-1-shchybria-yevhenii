@@ -29,7 +29,7 @@ const UserInfo = ({ userInfo }) => {
 				<Typography className="mb-5 text-gray-600">
 					{userInfo.username}
 				</Typography>
-				<Typography>{`${t("role")}: ${userRole}`}</Typography>
+				<Typography>{`${t("role")}: ${t(`${userRole}`)}`}</Typography>
 				<Typography>{`${t("company")}: ${userCompany}`}</Typography>
 			</CardContent>
 		</Card>
