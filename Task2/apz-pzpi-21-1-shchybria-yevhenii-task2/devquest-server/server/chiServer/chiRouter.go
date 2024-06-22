@@ -41,6 +41,7 @@ func getRoutes() http.Handler {
 	mux.Group(func(r chi.Router) {
 		r.Use(middleware.RolesRequired(*authSettings, "Manager,Developer"))
 
+		r.Get("/projects/{id}", projectHttpHandler.GetProjectByID)
 		r.Get("/projects/developers/{project_id}", projectHttpHandler.GetProjectDevelopers)
 
 		r.Get("/tasks/{project_id}", taskHttpHandler.GetProjectTasks)

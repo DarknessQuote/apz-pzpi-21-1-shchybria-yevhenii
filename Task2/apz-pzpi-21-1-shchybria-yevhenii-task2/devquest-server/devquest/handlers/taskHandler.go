@@ -215,7 +215,7 @@ func (t *TaskHttpHandler) GetTaskStatusByID(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	status, err := t.taskUsecase.GetTaskCategoryByID(statusID)
+	status, err := t.taskUsecase.GetTaskStatusByID(statusID)
 	if err != nil {
 		utils.ErrorJSON(w, err)
 		return

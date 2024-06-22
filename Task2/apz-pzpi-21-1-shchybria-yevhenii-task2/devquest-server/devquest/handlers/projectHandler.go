@@ -18,6 +18,22 @@ func NewProjectHttpHandler(pUsecase usecases.ProjectUsecase) *ProjectHttpHandler
 	return &ProjectHttpHandler{projectUsecase: pUsecase}
 }
 
+func (p *ProjectHttpHandler) GetProjectByID(w http.ResponseWriter, r *http.Request) {
+	projectID, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	project, err := p.projectUsecase.GetProjectByID(projectID)
+	if err != nil {
+		utils.ErrorJSON(w, err)
+		return
+	}
+
+	_ = utils.WriteJSON(w, http.StatusAccepted, project)
+}
+
 func (p *ProjectHttpHandler) GetProjectsOfManager(w http.ResponseWriter, r *http.Request) {
 	managerID, err := uuid.Parse(chi.URLParam(r, "manager_id"))
 	if err != nil {

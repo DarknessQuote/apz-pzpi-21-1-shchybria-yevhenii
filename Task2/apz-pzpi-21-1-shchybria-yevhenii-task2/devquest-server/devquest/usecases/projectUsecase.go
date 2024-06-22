@@ -19,6 +19,15 @@ func NewProjectUsecase(pRepo repositories.ProjectRepo, uRepo repositories.UserRe
 	return &ProjectUsecase{projectRepo: pRepo, userRepo: uRepo, companyRepo: cRepo}
 }
 
+func (p *ProjectUsecase) GetProjectByID(projectID uuid.UUID) (*entities.Project, error) {
+	project, err := p.projectRepo.GetProjectByID(projectID)
+	if err != nil {
+		return nil, err
+	}
+
+	return project, nil
+}
+
 func (p *ProjectUsecase) CreateNewProject(newProject models.CreateProjectDTO) error {
 	existingCompany, err := p.companyRepo.GetCompanyByID(newProject.CompanyID)
 	if err != nil {
