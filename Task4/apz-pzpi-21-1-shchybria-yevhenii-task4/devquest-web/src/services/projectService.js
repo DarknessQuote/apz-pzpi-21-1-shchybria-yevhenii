@@ -287,7 +287,7 @@ export const addDeveloperToProject = async (projectID, developerID, token) => {
 	}
 };
 
-export const removeDeveloperToProject = async (
+export const removeDeveloperFromProject = async (
 	projectID,
 	developerID,
 	token
