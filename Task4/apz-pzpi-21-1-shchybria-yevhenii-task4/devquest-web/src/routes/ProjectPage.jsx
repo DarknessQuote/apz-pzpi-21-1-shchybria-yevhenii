@@ -6,6 +6,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import TasksTab from "../components/TasksTab";
 import DevelopersTab from "../components/DevelopersTab";
+import AchievementsTab from "../components/AchievementTab";
 
 const ProjectPage = () => {
 	const [project, setProject] = useState(null);
@@ -54,6 +55,9 @@ const ProjectPage = () => {
 				)}
 				{tabIndex === 1 && project !== null && (
 					<DevelopersTab project={project} />
+				)}
+				{tabIndex === 2 && project !== null && (
+					<AchievementsTab project={project} />
 				)}
 			</Box>
 		</>
