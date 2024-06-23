@@ -124,6 +124,10 @@ export const getRoles = async () => {
 		);
 		const response = await responseJSON.json();
 
+		if (response === null) {
+			return [];
+		}
+
 		if (response.error) {
 			throw new Error(response.message);
 		}

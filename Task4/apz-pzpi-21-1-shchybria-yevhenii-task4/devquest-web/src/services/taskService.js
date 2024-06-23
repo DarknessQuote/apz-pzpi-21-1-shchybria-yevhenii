@@ -17,6 +17,10 @@ export const getProjectTasks = async (projectID, token) => {
 
 		const response = await responseJSON.json();
 
+		if (response === null) {
+			return [];
+		}
+
 		if (response.error) {
 			throw new Error(response.message);
 		}
@@ -200,6 +204,10 @@ export const getTaskCategories = async (token) => {
 		);
 		const response = await responseJSON.json();
 
+		if (response === null) {
+			return [];
+		}
+
 		if (response.error) {
 			throw new Error(response.message);
 		}
@@ -228,6 +236,10 @@ export const getTaskCategory = async (categoryID, token) => {
 		);
 		const response = await responseJSON.json();
 
+		if (response === null) {
+			return null;
+		}
+
 		if (response.error) {
 			throw new Error(response.message);
 		}
@@ -255,6 +267,10 @@ export const getTaskStatus = async (statusID, token) => {
 			reqOptions
 		);
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return null;
+		}
 
 		if (response.error) {
 			throw new Error(response.message);

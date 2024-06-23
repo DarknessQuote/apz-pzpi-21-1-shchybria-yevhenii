@@ -15,6 +15,10 @@ export const getCompanies = async () => {
 		);
 		const response = await responseJSON.json();
 
+		if (response === null) {
+			return [];
+		}
+
 		if (response.error) {
 			throw new Error(response.message);
 		}
@@ -41,6 +45,10 @@ export const getCompany = async (companyID) => {
 			reqOptions
 		);
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return null;
+		}
 
 		if (response.error) {
 			throw new Error(response.message);

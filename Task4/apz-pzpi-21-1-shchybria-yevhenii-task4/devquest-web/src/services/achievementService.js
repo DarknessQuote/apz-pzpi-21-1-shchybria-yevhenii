@@ -14,8 +14,11 @@ export const getProjectAchievements = async (projectID, token) => {
 			`${process.env.REACT_APP_BACKEND_URL}/achievements/project/${projectID}`,
 			reqOptions
 		);
-
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return [];
+		}
 
 		if (response.error) {
 			throw new Error(response.message);
@@ -43,8 +46,11 @@ export const getDeveloperAchievements = async (developerID, token) => {
 			`${process.env.REACT_APP_BACKEND_URL}/achievements/developer/${developerID}`,
 			reqOptions
 		);
-
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return [];
+		}
 
 		if (response.error) {
 			throw new Error(response.message);

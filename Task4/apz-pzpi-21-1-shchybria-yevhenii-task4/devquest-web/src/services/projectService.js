@@ -1,5 +1,37 @@
 import { getUser } from "./userService";
 
+export const getProject = async (projectID, token) => {
+	try {
+		const headers = new Headers();
+		headers.append("Content-Type", "application/json");
+		headers.append("Authorization", `Bearer ${token}`);
+
+		const reqOptions = {
+			method: "GET",
+			headers: headers,
+			credentials: "include",
+		};
+
+		const responseJSON = await fetch(
+			`${process.env.REACT_APP_BACKEND_URL}/projects/${projectID}`,
+			reqOptions
+		);
+		const response = await responseJSON.json();
+
+		if (response === null) {
+			return null;
+		}
+
+		if (response.error) {
+			throw new Error(response.message);
+		}
+
+		return response;
+	} catch (err) {
+		throw err;
+	}
+};
+
 export const getManagerProjects = async (managerID, token) => {
 	try {
 		const headers = new Headers();
@@ -16,8 +48,11 @@ export const getManagerProjects = async (managerID, token) => {
 			`${process.env.REACT_APP_BACKEND_URL}/projects/manager/${managerID}`,
 			reqOptions
 		);
-
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return [];
+		}
 
 		if (response.error) {
 			throw new Error(response.message);
@@ -45,8 +80,11 @@ export const getDeveloperProjects = async (developerID, token) => {
 			`${process.env.REACT_APP_BACKEND_URL}/projects/developer/${developerID}`,
 			reqOptions
 		);
-
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return [];
+		}
 
 		if (response.error) {
 			throw new Error(response.message);
@@ -74,8 +112,11 @@ export const getProjectDevelopers = async (projectID, token) => {
 			`${process.env.REACT_APP_BACKEND_URL}/projects/developers/${projectID}`,
 			reqOptions
 		);
-
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return [];
+		}
 
 		if (response.error) {
 			throw new Error(response.message);
@@ -103,8 +144,11 @@ export const getAvailableDevelopers = async (managerID, token) => {
 			`${process.env.REACT_APP_BACKEND_URL}/projects/available-developers/${managerID}`,
 			reqOptions
 		);
-
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return [];
+		}
 
 		if (response.error) {
 			throw new Error(response.message);

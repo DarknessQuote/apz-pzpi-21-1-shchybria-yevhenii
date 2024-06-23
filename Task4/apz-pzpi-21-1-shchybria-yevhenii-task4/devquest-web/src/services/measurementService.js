@@ -13,8 +13,11 @@ export const getMeasurementsForDeveloper = async (developerID) => {
 			`${process.env.REACT_APP_BACKEND_URL}/measure/${developerID}`,
 			reqOptions
 		);
-
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return [];
+		}
 
 		if (response.error) {
 			throw new Error(response.message);

@@ -13,8 +13,16 @@ export const getUser = async (userID) => {
 			`${process.env.REACT_APP_BACKEND_URL}/user/${userID}`,
 			reqOptions
 		);
-
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return null;
+		}
+
+		if (response.error) {
+			throw new Error(response.message);
+		}
+
 		return response;
 	} catch (err) {
 		throw err;
@@ -36,8 +44,16 @@ export const getRole = async (roleID) => {
 			`${process.env.REACT_APP_BACKEND_URL}/role/${roleID}`,
 			reqOptions
 		);
-
 		const response = await responseJSON.json();
+
+		if (response === null) {
+			return null;
+		}
+
+		if (response.error) {
+			throw new Error(response.message);
+		}
+
 		return response;
 	} catch (err) {
 		throw err;
