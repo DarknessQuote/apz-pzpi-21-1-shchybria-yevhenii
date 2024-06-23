@@ -9,11 +9,14 @@ import {
 } from "@mui/material";
 import { useAuthContext } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const ProjectCard = ({ project, handleEdit, handleDelete }) => {
 	const [manager, setManager] = useState(null);
 
 	const [auth] = useAuthContext();
+
+	const navigate = useNavigate();
 
 	const { t } = useTranslation();
 
@@ -33,12 +36,15 @@ const ProjectCard = ({ project, handleEdit, handleDelete }) => {
 	return (
 		<Card>
 			<CardContent>
-				<Typography variant="h5" className="mb-1">
+				<Typography
+					variant="h5"
+					className="mb-1 w-fit transition-all hover:text-gray-800 hover:underline hover:cursor-pointer"
+					onClick={() => navigate(`/projects/${project.id}`)}>
 					{project.name}
 				</Typography>
 				<Typography className="mb-5">{project.description}</Typography>
 				<Typography>
-					Manager:{" "}
+					{t("manager")}:{" "}
 					{manager !== null
 						? `${manager?.last_name} ${manager?.first_name}`
 						: ""}

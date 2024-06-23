@@ -9,6 +9,8 @@ import {
 	createTheme,
 } from "@mui/material";
 import { AuthProvider } from "./context/AuthContext";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "./adapting/i18n";
 
 const rootElement = document.getElementById("root");
@@ -37,10 +39,12 @@ const theme = createTheme({
 root.render(
 	<StyledEngineProvider injectFirst>
 		<ThemeProvider theme={theme}>
-			<AuthProvider>
-				<CssBaseline />
-				<App />
-			</AuthProvider>
+			<LocalizationProvider dateAdapter={AdapterDayjs}>
+				<AuthProvider>
+					<CssBaseline />
+					<App />
+				</AuthProvider>
+			</LocalizationProvider>
 		</ThemeProvider>
 	</StyledEngineProvider>
 );
