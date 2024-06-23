@@ -44,7 +44,9 @@
 	"addTask": "Додати завдання",
 	"addDeveloper": "Додати розробника",
 	"addAchievement": "Додати досягнення",
+	"giveAchievement": "Дати досягнення",
 	"noAvailableDevelopers": "Немає наявних розробників",
+	"noAvailableAchievements": "Немає наявних досягнень",
 
 	"Admin": "Адміністратор",
 	"Manager": "Менеджер",

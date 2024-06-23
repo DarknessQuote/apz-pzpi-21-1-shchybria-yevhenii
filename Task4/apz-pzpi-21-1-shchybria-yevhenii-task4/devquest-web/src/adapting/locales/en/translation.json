@@ -44,7 +44,9 @@
 	"addTask": "Add task",
 	"addDeveloper": "Add developer",
 	"addAchievement": "Add achievement",
+	"giveAchievement": "Give achievement",
 	"noAvailableDevelopers": "No available developers",
+	"noAvailableAchievements": "No available achievements",
 
 	"Admin": "Admin",
 	"Manager": "Manager",

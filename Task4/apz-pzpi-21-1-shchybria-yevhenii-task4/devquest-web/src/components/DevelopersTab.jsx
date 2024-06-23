@@ -8,6 +8,7 @@ import {
 import {
 	Box,
 	Button,
+	ButtonGroup,
 	Dialog,
 	DialogContent,
 	Divider,
@@ -17,10 +18,14 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import AvailableDevelopers from "./AvailableDevelopers";
+import GiveAchievement from "./GiveAchievement";
+import { giveAchievement } from "../services/achievementService";
 
 const DevelopersTab = ({ project }) => {
 	const [developers, setDevelopers] = useState([]);
+	const [selectedDeveloper, setSelectedDeveloper] = useState(null);
 	const [modalOpen, setModalOpen] = useState(false);
+	const [modalElement, setModalElement] = useState("developers");
 
 	const [auth] = useAuthContext();
 
@@ -58,13 +63,29 @@ const DevelopersTab = ({ project }) => {
 		handleClose();
 	};
 
+	const handleGiveAchievement = async (achievementID) => {
+		await giveAchievement(
+			project.id,
+			achievementID,
+			selectedDeveloper.id,
+			auth.token
+		);
+		setDevelopers(await getProjectDevelopers(project.id, auth.token));
+
+		setSelectedDeveloper(null);
+		handleClose();
+	};
+
 	return (
 		<>
 			{auth !== null && auth.role === "Manager" && (
 				<Button
 					variant="contained"
 					className="py-3 mb-8 w-full"
-					onClick={() => handleOpen()}>
+					onClick={() => {
+						setModalElement("developers");
+						handleOpen();
+					}}>
 					{t("addDeveloper")}
 				</Button>
 			)}
@@ -85,13 +106,26 @@ const DevelopersTab = ({ project }) => {
 									className="grow"
 								/>
 								{auth !== null && auth.role === "Manager" && (
-									<Button
-										variant="contained"
-										onClick={() =>
-											handleRemoveDeveloper(developer.id)
-										}>
-										{t("remove")}
-									</Button>
+									<ButtonGroup variant="contained">
+										<Button
+											variant="contained"
+											onClick={() => {
+												setModalElement("achievements");
+												setSelectedDeveloper(developer);
+												handleOpen();
+											}}>
+											{t("giveAchievement")}
+										</Button>
+										<Button
+											variant="contained"
+											onClick={() =>
+												handleRemoveDeveloper(
+													developer.id
+												)
+											}>
+											{t("remove")}
+										</Button>
+									</ButtonGroup>
 								)}
 							</ListItem>
 							{i < developers.length - 1 && <Divider />}
@@ -101,10 +135,17 @@ const DevelopersTab = ({ project }) => {
 			</List>
 			<Dialog open={modalOpen} onClose={handleClose}>
 				<DialogContent>
-					<AvailableDevelopers
-						developers={developers}
-						addDeveloper={handleAddDeveloper}
-					/>
+					{modalElement === "developers" ? (
+						<AvailableDevelopers
+							developers={developers}
+							addDeveloper={handleAddDeveloper}
+						/>
+					) : (
+						<GiveAchievement
+							projectID={project.id}
+							giveAchievement={handleGiveAchievement}
+						/>
+					)}
 				</DialogContent>
 			</Dialog>
 		</>
