@@ -39,7 +39,7 @@ const ProjectCard = ({ project, handleEdit, handleDelete }) => {
 				<Typography
 					variant="h5"
 					className="mb-1 w-fit transition-all hover:text-gray-800 hover:underline hover:cursor-pointer"
-					onClick={() => navigate(`/projects/${project.id}`)}>
+					onClick={() => navigate(`/project/${project.id}`)}>
 					{project.name}
 				</Typography>
 				<Typography className="mb-5">{project.description}</Typography>

@@ -49,6 +49,7 @@
 	"noAvailableAchievements": "Немає наявних досягнень",
 	"noEarnedAchievements": "Немає зароблених досягнень",
 	"noMeasurements": "Вимірювання відсутні",
+	"accessDenied": "Відмовлено у доступі",
 	"measurements": "Вимірювання",
 	"measureType": "Тип виміру",
 	"measureTime": "Час виміру",
