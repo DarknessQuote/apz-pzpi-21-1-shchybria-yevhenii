@@ -33,30 +33,38 @@ const DeveloperMeasurements = () => {
 				{t("measurements")}
 			</Typography>
 			<Grid container spacing={2}>
-				{measurements.map((measure) => {
-					return (
-						<Grid item xs={4}>
-							<Card>
-								<CardContent>
-									<Typography>{`${t("measureType")}: ${t(
-										measure.type_name
-									)}`}</Typography>
-									<Typography className="mb-3">{`${t(
-										"measureTime"
-									)}: ${new Date(
-										measure.measured_at
-									).toLocaleString()}`}</Typography>
-									<Typography>{`${t("measureValue")}: ${
-										measure.value
-									}`}</Typography>
-									<Typography>
-										{t(measure.message)}
-									</Typography>
-								</CardContent>
-							</Card>
-						</Grid>
-					);
-				})}
+				{measurements.length > 0 ? (
+					measurements.map((measure) => {
+						return (
+							<Grid item xs={4}>
+								<Card>
+									<CardContent>
+										<Typography>{`${t("measureType")}: ${t(
+											measure.type_name
+										)}`}</Typography>
+										<Typography className="mb-3">{`${t(
+											"measureTime"
+										)}: ${new Date(
+											measure.measured_at
+										).toLocaleString()}`}</Typography>
+										<Typography>{`${t("measureValue")}: ${
+											measure.value
+										}`}</Typography>
+										<Typography>
+											{t(measure.message)}
+										</Typography>
+									</CardContent>
+								</Card>
+							</Grid>
+						);
+					})
+				) : (
+					<Grid item xs={12}>
+						<Typography variant="h6" align={"center"}>
+							{t("noMeasurements")}
+						</Typography>
+					</Grid>
+				)}
 			</Grid>
 		</Box>
 	);

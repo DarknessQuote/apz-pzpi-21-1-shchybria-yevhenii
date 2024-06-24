@@ -47,6 +47,8 @@
 	"giveAchievement": "Give achievement",
 	"noAvailableDevelopers": "No available developers",
 	"noAvailableAchievements": "No available achievements",
+	"noEarnedAchievements": "No earned achievements",
+	"noMeasurements": "No measurements",
 	"measurements": "Measurements",
 	"measureType": "Measurement type",
 	"measureTime": "Measured at",

@@ -47,6 +47,8 @@
 	"giveAchievement": "Дати досягнення",
 	"noAvailableDevelopers": "Немає наявних розробників",
 	"noAvailableAchievements": "Немає наявних досягнень",
+	"noEarnedAchievements": "Немає зароблених досягнень",
+	"noMeasurements": "Вимірювання відсутні",
 	"measurements": "Вимірювання",
 	"measureType": "Тип виміру",
 	"measureTime": "Час виміру",

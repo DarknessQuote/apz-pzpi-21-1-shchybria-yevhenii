@@ -58,41 +58,54 @@ const DeveloperAchievements = () => {
 			<Typography variant="h5" align={"center"} className="mb-6">
 				{t("achievements")}
 			</Typography>
-			{projects.map((project) => {
-				return (
-					<Paper elevation={3} className="p-3 mb-3" key={project.id}>
-						<Typography variant="h6">{project.name}</Typography>
-						<Divider className="my-3" />
-						<Grid container spacing={2}>
-							{achievements
-								.filter((ach) => ach.project_id === project.id)
-								.map((ach) => {
-									return (
-										<Grid item xs={3}>
-											<Card>
-												<CardContent>
-													<Typography className="text-lg">
-														{ach.name}
-													</Typography>
-													<Typography
-														color={"text.secondary"}
-														className="text-sm mb-2">
-														{ach.description}
-													</Typography>
-													<Typography>
-														{`${t("points")}: ${
-															ach.points
-														}`}
-													</Typography>
-												</CardContent>
-											</Card>
-										</Grid>
-									);
-								})}
-						</Grid>
-					</Paper>
-				);
-			})}
+			{projects.length > 0 ? (
+				projects.map((project) => {
+					return (
+						<Paper
+							elevation={3}
+							className="p-3 mb-3"
+							key={project.id}>
+							<Typography variant="h6">{project.name}</Typography>
+							<Divider className="my-3" />
+							<Grid container spacing={2}>
+								{achievements
+									.filter(
+										(ach) => ach.project_id === project.id
+									)
+									.map((ach) => {
+										return (
+											<Grid item xs={3}>
+												<Card>
+													<CardContent>
+														<Typography className="text-lg">
+															{ach.name}
+														</Typography>
+														<Typography
+															color={
+																"text.secondary"
+															}
+															className="text-sm mb-2">
+															{ach.description}
+														</Typography>
+														<Typography>
+															{`${t("points")}: ${
+																ach.points
+															}`}
+														</Typography>
+													</CardContent>
+												</Card>
+											</Grid>
+										);
+									})}
+							</Grid>
+						</Paper>
+					);
+				})
+			) : (
+				<Typography variant="h6" align={"center"}>
+					{t("noEarnedAchievements")}
+				</Typography>
+			)}
 		</Box>
 	);
 };
