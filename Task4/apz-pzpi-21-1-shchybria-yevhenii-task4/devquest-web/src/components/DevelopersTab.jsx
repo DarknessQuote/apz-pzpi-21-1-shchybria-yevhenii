@@ -72,6 +72,7 @@ const DevelopersTab = ({ project }) => {
 		);
 		setDevelopers(await getProjectDevelopers(project.id, auth.token));
 
+		setModalElement("developers");
 		setSelectedDeveloper(null);
 		handleClose();
 	};
@@ -84,6 +85,7 @@ const DevelopersTab = ({ project }) => {
 					className="py-3 mb-8 w-full"
 					onClick={() => {
 						setModalElement("developers");
+						setSelectedDeveloper(null);
 						handleOpen();
 					}}>
 					{t("addDeveloper")}
