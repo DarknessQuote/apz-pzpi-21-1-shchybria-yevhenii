@@ -47,6 +47,18 @@
 	"giveAchievement": "Give achievement",
 	"noAvailableDevelopers": "No available developers",
 	"noAvailableAchievements": "No available achievements",
+	"measurements": "Measurements",
+	"measureType": "Measurement type",
+	"measureTime": "Measured at",
+	"measureValue": "Measurement value",
+
+	"Results are normal": "Results are normal",
+	"Results are below optimal levels": "Results are below optimal levels",
+	"Results are above optimal levels": "Results are above optimal levels",
+
+	"Pulse": "Pulse",
+	"Humidity": "Humidity",
+	"Illumination": "Illumination",
 
 	"Admin": "Admin",
 	"Manager": "Manager",

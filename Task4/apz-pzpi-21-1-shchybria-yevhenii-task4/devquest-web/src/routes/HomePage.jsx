@@ -7,6 +7,7 @@ import UserInfo from "../components/UserInfo";
 import { useNavigate } from "react-router-dom";
 import { dataBackup } from "../services/adminService";
 import DeveloperAchievements from "../components/DeveloperAchievements";
+import DeveloperMeasurements from "../components/DeveloperMeasurements";
 
 const HomePage = () => {
 	const [auth] = useAuthContext();
@@ -54,6 +55,8 @@ const HomePage = () => {
 					<>
 						<Divider className="my-8" />
 						<DeveloperAchievements />
+						<Divider className="my-8" />
+						<DeveloperMeasurements />
 					</>
 				)}
 			</Box>

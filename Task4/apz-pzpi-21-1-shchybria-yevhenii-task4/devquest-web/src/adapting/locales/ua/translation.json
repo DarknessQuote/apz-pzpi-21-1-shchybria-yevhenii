@@ -47,6 +47,18 @@
 	"giveAchievement": "Дати досягнення",
 	"noAvailableDevelopers": "Немає наявних розробників",
 	"noAvailableAchievements": "Немає наявних досягнень",
+	"measurements": "Вимірювання",
+	"measureType": "Тип виміру",
+	"measureTime": "Час виміру",
+	"measureValue": "Значення виміру",
+
+	"Results are normal": "Показники в нормі",
+	"Results are below optimal levels": "Показники нижче оптимального рівню",
+	"Results are above optimal levels": "Показники вище оптимального рівню",
+
+	"Pulse": "Пульс",
+	"Humidity": "Вологість",
+	"Illumination": "Рівень освітлення",
 
 	"Admin": "Адміністратор",
 	"Manager": "Менеджер",
