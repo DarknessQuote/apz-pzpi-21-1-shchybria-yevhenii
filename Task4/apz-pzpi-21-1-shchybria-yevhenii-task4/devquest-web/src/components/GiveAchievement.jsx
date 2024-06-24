@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
-import { getProjectAchievements } from "../services/achievementService";
+import {
+	getDeveloperAchievements,
+	getProjectAchievements,
+} from "../services/achievementService";
 import {
 	Box,
 	Button,
@@ -12,7 +15,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const GiveAchievement = ({ projectID, giveAchievement }) => {
+const GiveAchievement = ({ projectID, developerID, giveAchievement }) => {
 	const [achievements, setAchievements] = useState([]);
 
 	const [auth] = useAuthContext();
@@ -27,7 +30,17 @@ const GiveAchievement = ({ projectID, giveAchievement }) => {
 						projectID,
 						auth.token
 					);
-					setAchievements(fetchedAchievements);
+					const developerAchievements =
+						await getDeveloperAchievements(developerID, auth.token);
+
+					const availableAchievements = fetchedAchievements.filter(
+						(achievement) =>
+							developerAchievements.find(
+								(devAchievement) =>
+									devAchievement.id === achievement.id
+							) === undefined
+					);
+					setAchievements(availableAchievements);
 				};
 
 				fetchAchievements();
@@ -35,7 +48,7 @@ const GiveAchievement = ({ projectID, giveAchievement }) => {
 		} catch (err) {
 			console.error(err);
 		}
-	}, [auth, projectID]);
+	}, [auth, projectID, developerID]);
 
 	return achievements.length > 0 ? (
 		<List>

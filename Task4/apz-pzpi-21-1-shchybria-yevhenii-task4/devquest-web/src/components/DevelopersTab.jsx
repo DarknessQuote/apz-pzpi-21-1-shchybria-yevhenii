@@ -143,6 +143,7 @@ const DevelopersTab = ({ project }) => {
 					) : (
 						<GiveAchievement
 							projectID={project.id}
+							developerID={selectedDeveloper.id}
 							giveAchievement={handleGiveAchievement}
 						/>
 					)}
